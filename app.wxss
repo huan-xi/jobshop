@@ -1,0 +1,6 @@
+page {
+  background-color: rgba(250,250,250,0.90);
+}
+.btn{
+  background-color: #1296db;
+}
