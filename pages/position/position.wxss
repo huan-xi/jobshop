@@ -1,0 +1,28 @@
+page{
+  background-color:  rgba(215, 215, 215, 0.2);
+}
+.position-list{
+  padding-bottom: 40rpx;
+}
+.jobBox{
+  margin-top: 20rpx;
+  padding: 20rpx;
+  background-color: white;
+}
+.salary{
+  float: right;
+  margin-right: 0;
+  color: rgb(224, 135, 108);
+}
+.desc{
+  color: gray;
+  display: inline-block;
+  margin-right: 20rpx;
+  font-size: 24rpx;
+}
+.editImage{
+  float: right;
+  width: 50rpx;
+  height: 50rpx;
+  margin-right: 50rpx;
+}

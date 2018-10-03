@@ -1,0 +1,29 @@
+<!--pages/editVender/editVender.wxml-->
+<view>
+  <form bindsubmit="formSubmit">
+    <view class='group'>
+      <text class='label'>公司名称:</text>
+      <input name='name' value='{{vender.name}}' placeholder='请输入公司名称'></input>
+    </view>
+    <view class='group'>
+      <text class='label'>联系人姓名:</text>
+      <input name='contacts'  placeholder='请输入联系人姓名'></input>
+    </view>
+    <view class='group'>
+      <text class='label'>联系人电话:</text>
+      <input name='phone' type="number" placeholder='请输入联系人电话'></input>
+    </view>
+    <view class='group'>
+      <text class='label'>选择公司地址</text>
+      <view bindtap='onChangeAddress'>
+        <text class='addr' wx:if="{{address.name}}">{{address.name}}</text>
+        <view class='chooseAddr' wx:else="">点击选择公司地址</view>
+      </view>
+    </view>
+    <view class='detail'>
+      <view>地址详细描述</view>
+      <textarea name='address_desc' placeholder='请填写公司所在地址的详细描述'></textarea>
+    </view>
+    <button formType="submit"  class='btn'>保存信息</button>
+  </form>
+</view>

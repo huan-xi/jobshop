@@ -1,0 +1,9 @@
+.group input,.group .chooseAddr,.addr{
+  margin-left: 50rpx;
+}
+.addr{
+  color: gray;
+}
+form .btn{
+  margin-top: 200rpx;
+}

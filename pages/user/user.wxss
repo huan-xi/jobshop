@@ -1,0 +1,24 @@
+ .title{
+  text-align: center;
+}
+.group{
+  padding: 30rpx 30rpx;
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  font-size: 35rpx;
+  border-bottom: solid 1rpx rgba(182, 182, 182, 0.527);
+}
+.info{
+  padding: 50rpx 50rpx;
+}
+.btn{
+  margin-top: 150rpx;
+}
+.label-addr{
+  width: 300rpx;
+}

@@ -1,0 +1,27 @@
+<view class='info' >
+  <view class=''>
+    <view class='title'>公司信息</view>
+    <view class='group'>
+      <text class=''>公司名称：</text>
+      <text class='context'>{{vender.name?vender.name:'未填写'}}</text>
+    </view>
+    <view class='group'>
+      <text class=''>联系人电话：</text>
+      <text class='context'>{{vender.phone?vender.phone:'未填写'}}</text>
+    </view>
+     <view class='group'>
+      <text class=''>联系人姓名：</text>
+      <text class='context'>{{vender.contacts?vender.contacts:'未填写'}}</text>
+    </view>
+    <view class='group'>
+      <text class='label-addr'>定位地址：</text>
+      <text class='context'>{{vender.address?vender.address:'未填写'}}</text>
+    </view>
+    <view class='group'>
+      <text class=''>地址详细描述：</text>
+      <text class='context'>{{vender.addressDesc?vender.addressDesc:'未填写'}}</text>
+    </view>
+      <button bindtap='tosaveTap' class='btn'>编辑信息</button>
+  </view>
+  
+</view>

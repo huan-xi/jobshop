@@ -1,20 +1,6 @@
 <view class='index'>
-  <view class='header'>
-    <view bindtap='publicTap'>
-      <text class="{{isPublic?'active':''}}">发布职位</text>
-    </view>
-    <view bindtap='orderTap'>
-      <text class="{{isPublic?'':'active'}}">已经发布</text>
-    </view>
-  </view>
-  <view class='public' wx:if="{{isPublic}}">
+  <view class='public'>
     <form bindsubmit="formSubmit">
-     <!-- <view class='type'>
-        <view class='title'>请选择职位的工种</view>
-        <view class="list">
-          <view wx:for="{{types}}" wx:key="key" bindtap='typeTap' data-id='{{types[index].typeId}}' class="{{types[index].state?'select':''}}">{{types[index].typeName}}</view>
-        </view>
-      </view>-->
       <view class='info'>
       <!--  <view class='title'>职位信息</view>-->
               <view class='group'>
@@ -30,12 +16,13 @@
         </view>
         <view class='group'>
           <text class='label'>招工人数:</text>
-          <input name='title' placeholder='请输入招工人数'></input>
+          <input class='count' name='count' type="number" placeholder='请输入招工人数'></input>
+          <view class='unit'>人</view>
         </view>
         <view class='group'>
           <text class='label'>工作时间</text>
           <view class='rightBox'>
-            <picker bindchange="bindBirthdayPickerChange" mode="date" value="{{workTime}}">
+            <picker start="{{startTime}}" bindchange="bindTimePickerChange" mode="date" value="{{workTime}}">
               <view class="picker">
                 {{workTime}}
               </view>
@@ -56,22 +43,13 @@
         </view>
         <view class='group'  wx:if="{{isByTiem}}">
           <text class='label'>大概工资:</text>
-          <input class='salary' name='salary' placeholder='请填写大概工资'></input>
+          <input class='salary' type="digit" name='salary' placeholder='请填写大概工资'></input>
           <picker class='unit' bindchange="bindPickerUnitChange" range="{{salatyType}}" value="{{salatyTypeIndex}}">
             <view class="picker">
               {{salatyType[salatyTypeIndex]}}
             </view>
           </picker>
           <image class='salary-right' src='/images/right.png'></image>
-        </view>
-        <view class='group'>
-          <text class='label'>工作地点</text>
-          <view class='rightBox'>
-            <view class='address' bindtap='onChangeAddress'>
-              {{address.name}}
-            </view>
-            <image src='/images/right.png'></image>
-          </view>
         </view>
         <view class='detail'>
           <view>详细描述</view>
@@ -94,5 +72,4 @@
       <button formType="submit" class="btn">发布</button>
     </form>
   </view>
-  <view wx:else="{{isPublic}}">fdsadfsa</view>
 </view>
