@@ -22,7 +22,7 @@
         <view class='group'>
           <text class='label'>工作时间</text>
           <view class='rightBox'>
-            <picker start="{{startTime}}" bindchange="bindTimePickerChange" mode="date" value="{{workTime}}">
+            <picker start="{{startTime}}" end="{{endTime}}" bindchange="bindTimePickerChange" mode="date" value="{{workTime}}">
               <view class="picker">
                 {{workTime}}
               </view>

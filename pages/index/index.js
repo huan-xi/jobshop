@@ -8,6 +8,7 @@ Page({
     typeIndex: 0,
     workTime: '',
     startTime: '',
+    endTime:'',
     workType: ['计时', '计件'],
     workTypeIndex: 0,
     salatyType: ['元/小时', '元/2小时', '元/3小时', '元/4小时', '元/5小时', '元/6小时', '元/7小时', '元/8小时', '元/9小时', '元/10小时', '元/11小时', '元/12小时'],
@@ -32,7 +33,8 @@ Page({
       var that = this
       that.setData({
         startTime: util.formatTime(new Date()),
-        workTime: util.formatTime(new Date())
+        workTime: util.formatTime(new Date()),
+        endTime:util.formatTimeAdd(new Date()),
       })
       wxRequest.get(api.getTypes, e => {
         var types = []
