@@ -16,5 +16,11 @@ module.exports={
   //获取全部职位信息
   getPositions:function(page,size){
     return url + `/getPositions?page=${page}&size=${size}`
-  }
+  },
+  //获取职位详情
+   getPosition: function (id) {
+    return config.getDomain + `/public/getPosition?id=${id}`
+  },
+  //修改职位信息
+  editPosition: url +"/editPosition"
 }

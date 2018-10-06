@@ -122,6 +122,9 @@ Page({
       })
       return
     }
+    if (!this.data.isByTiem) {
+      val.salary = -1;
+    }
     if (!val.desc) {
       wx.showModal({
         title: '提示',
@@ -164,8 +167,17 @@ Page({
           }, function (e) {
             wx.hideLoading()
             if (e.status == 1) {
-              wx.showToast({
-                title: '发布成功',
+              wx.showModal({
+                title: '提示',
+                content: '发布成功，你可以在两分钟之内做修改',
+                confirmText:"查看发布",
+                success: e => {
+                  if(e.confirm){
+                    wx.switchTab({
+                      url: '/pages/position/position',
+                    })
+                  }
+                }
               })
             } else {
               wx.showModal({
@@ -198,8 +210,18 @@ Page({
     }, function(e) {
       wx.hideLoading()
       if (e.status == 1) {
-        wx.showToast({
-          title: '发布成功',
+        console.log(e)
+        wx.showModal({
+          title: '提示',
+          content: '发布成功，你可以在两分钟之内做修改',
+          confirmText: "查看发布",
+          success: e => {
+            if (e.confirm) {
+              wx.switchTab({
+                url: '/pages/position/position',
+              })
+            }
+          }
         })
       } else {
         wx.showModal({

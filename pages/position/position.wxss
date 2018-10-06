@@ -18,11 +18,14 @@ page{
   color: gray;
   display: inline-block;
   margin-right: 20rpx;
-  font-size: 24rpx;
+  font-size: 28rpx;
 }
 .editImage{
   float: right;
   width: 50rpx;
   height: 50rpx;
   margin-right: 50rpx;
+}
+.jobBox view{
+  height: 40rpx;
 }

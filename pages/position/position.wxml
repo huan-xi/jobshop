@@ -1,8 +1,8 @@
 <view class='position-list'>
-<view wx:for="{{positions}}" wx:key="key" wx:for-index="index"      wx:for-item="item" class='jobBox' bindtap="positionTap" id="{{item.positionId}}">
+<view wx:for="{{positions}}" wx:key="key" wx:for-index="index"      wx:for-item="item" class='jobBox' id="{{item.positionId}}">
       <view>
       <text class='title'>{{item.type}}</text>
-      <image class='editImage' bindtap='editTap' src='/images/edite.png'></image>
+      <image class='editImage' id='{{item.positionId}}' bindtap='editTap' src='/images/edite.png'></image>
       </view>
       <view>
         <text class='desc'>工作时间</text>
@@ -15,6 +15,11 @@
       <view>
         <text class='desc'>大概工资</text>
         <text class='desc'>{{item.salary>=0?item.salary+item.salaryType:'计件'}}</text>
+      <image class='editImage' id='{{item.positionId}}' bindtap='deleteTap' src='/images/delete.png'></image>
+      </view>
+      <view>
+        <text class='desc'>状态</text>
+        <text class='desc'>{{item.status}}</text>
       </view>
     </view>
 </view>

@@ -1,4 +1,4 @@
-<view class='info' >
+<view class='info' wx:if='{{vender.venderId}}'>
   <view class=''>
     <view class='title'>公司信息</view>
     <view class='group'>
@@ -18,7 +18,7 @@
       <text class='context'>{{vender.address?vender.address:'未填写'}}</text>
     </view>
     <view class='group'>
-      <text class=''>地址详细描述：</text>
+      <text class='label-addr'>地址详细描述：</text>
       <text class='context'>{{vender.addressDesc?vender.addressDesc:'未填写'}}</text>
     </view>
       <button bindtap='tosaveTap' class='btn'>编辑信息</button>

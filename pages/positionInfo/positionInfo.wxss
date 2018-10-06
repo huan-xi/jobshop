@@ -1,1 +1,6 @@
-/* pages/positionInfo/positionInfo.wxss */
+.group input{
+  text-align: right;
+}
+.count{
+  margin-left: 50rpx;
+}
