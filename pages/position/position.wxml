@@ -1,25 +1,39 @@
+<view class='header'>
+    <view bindtap='notFinishTap'>
+      <text class="{{!isFinish?'active':''}}">未完成</text>
+    </view>
+    <view bindtap='finishTap'>
+      <text class="{{isFinish?'active':''}}">已完成</text>
+    </view>
+  </view>
 <view class='position-list'>
-<view wx:for="{{positions}}" wx:key="key" wx:for-index="index"      wx:for-item="item" class='jobBox' id="{{item.positionId}}">
-      <view>
+  <view wx:for="{{positions}}" wx:key="key" wx:for-index="index" wx:for-item="item" class='jobBox' id="{{item.positionId}}">
+    <view>
       <text class='title'>{{item.type}}</text>
       <image class='editImage' id='{{item.positionId}}' bindtap='editTap' src='/images/edite.png'></image>
-      </view>
-      <view>
-        <text class='desc'>工作时间</text>
-        <text class='desc'>{{item.time}}</text>
-      </view>
-       <view>
-        <text class='desc'>招工人数</text>
-        <text class='desc'>{{item.hCount}}/{{item.count}}人</text>
-      </view>
-      <view>
-        <text class='desc'>大概工资</text>
-        <text class='desc'>{{item.salary>=0?item.salary+item.salaryType:'计件'}}</text>
-      <image class='editImage' id='{{item.positionId}}' bindtap='deleteTap' src='/images/delete.png'></image>
-      </view>
-      <view>
-        <text class='desc'>状态</text>
-        <text class='desc'>{{item.status}}</text>
-      </view>
     </view>
+    <view>
+      <text class='desc'>工作时间</text>
+      <text class='desc'>{{item.time}}</text>
+    </view>
+    <view>
+      <text class='desc'>招工人数</text>
+      <text class='desc'>{{item.hCount}}/{{item.count}}人</text>
+    </view>
+    <view>
+      <text class='desc'>大概工资</text>
+      <text class='desc'>{{item.salary>=0?item.salary+item.salaryType:'计件'}}</text>
+      <image class='editImage' id='{{item.positionId}}' bindtap='deleteTap' src='/images/delete.png'></image>
+    </view>
+    <view>
+      <text class='desc'>状态</text>
+      <text class='desc'>{{item.status}}</text>
+    </view>
+  </view>
+</view>
+<view class="showerror" hidden='{{positions.length}}' bindtap='retryTap'>
+  <image src="/images/no.png" style="height:100rpx;width:100rpx"></image>
+  <view class="errortext">
+    没有订单,下拉试试
+  </view>
 </view>

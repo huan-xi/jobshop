@@ -18,7 +18,7 @@ page{
   color: gray;
   display: inline-block;
   margin-right: 20rpx;
-  font-size: 28rpx;
+  font-size: 25rpx;
 }
 .editImage{
   float: right;

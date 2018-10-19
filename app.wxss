@@ -35,7 +35,7 @@ page {
   visibility: hidden;
 }
 .group{
-padding: 30rpx 30rpx;
+  padding: 30rpx 30rpx;
   position: relative;
   display: -webkit-box;
   display: -webkit-flex;
@@ -46,7 +46,23 @@ padding: 30rpx 30rpx;
   font-size: 30rpx;
   border-bottom: solid 1rpx rgba(182, 182, 182, 0.527);
 }
-
+.header view {
+  display: inline-block;
+  text-align: center;
+  width: 50%;
+  background-color: white;
+}
+.header text{
+  color: rgb(95, 95, 95);
+  font-size: 30rpx;
+  display: inline-block;
+  padding: 10rpx 0;
+  border-bottom: solid 2px white;
+}
+.active{
+  color: black !important;
+  border-bottom: solid 2px #1296db !important;
+}
 .public{
   padding: 0 25rpx;
 }
@@ -103,4 +119,16 @@ padding: 30rpx 30rpx;
 }
 .reChoose{
   margin-bottom: 20rpx;
+}
+.showerror {
+  text-align: center;
+  font-weight: normal;
+  font-size: 30rpx;
+  line-height: 40rpx;
+  color: #757575;
+  margin-top: 100rpx;
+}
+.errortext {
+  margin-top: 50rpx;
+  table-layout: center;
 }

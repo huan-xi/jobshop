@@ -9,7 +9,7 @@
       <text class=''>联系人电话：</text>
       <text class='context'>{{vender.phone?vender.phone:'未填写'}}</text>
     </view>
-     <view class='group'>
+    <view class='group'>
       <text class=''>联系人姓名：</text>
       <text class='context'>{{vender.contacts?vender.contacts:'未填写'}}</text>
     </view>
@@ -21,7 +21,14 @@
       <text class='label-addr'>地址详细描述：</text>
       <text class='context'>{{vender.addressDesc?vender.addressDesc:'未填写'}}</text>
     </view>
-      <button bindtap='tosaveTap' class='btn'>编辑信息</button>
+    <button bindtap='tosaveTap' class='btn'>编辑信息</button>
   </view>
-  
+</view>
+<view wx:else>
+  <view class="showerror" hidden='{{positions.length}}' bindtap='retryTap'>
+    <image src="/images/cry80.png" style="height:100rpx;width:100rpx"></image>
+    <view class="errortext">
+      暂时无法访问网络,点击重试
+    </view>
+  </view>
 </view>

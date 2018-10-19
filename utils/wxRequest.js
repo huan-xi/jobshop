@@ -1,3 +1,34 @@
+function dofilter(e, s) {
+  //POST拦截
+  if (e.data.status == 4003) {
+    wx.hideLoading()
+    wx.showModal({
+      title: '提示',
+      content: '你还未登入是否自动登入',
+      confirmText: '去登入',
+      success: function (e) {
+        if (e.confirm) {
+          //登入
+          getApp().globalData.token=''
+          wx.switchTab({
+            url: '/pages/user/user',
+          })
+        }
+      }
+    })
+    return
+  }
+  if (e.data.status == 5000) {
+    wx.hideLoading()
+    wx.showModal({
+      title: '提示',
+      content: e.data.msg,
+      showCancel: false
+    })
+    return
+  }
+  s(e.data);
+}
 /**
  * 微信请求post方法封装
  * url
@@ -13,29 +44,7 @@ function postRequest(url, data, s) {
       'Token': getApp().globalData.token
     },
     success: function (e) {
-      
-      //POST拦截
-      if (e.data.status == 4003) {
-        wx.hideLoading()
-        wx.showModal({
-          title: '提示',
-          content: '你还未登入是否去登入',
-          confirmText: '去登入',
-          success: function (e) {
-            //清空Token
-            getApp().globalData.token = '';
-            wx.setStorageSync('Token', '')
-            if (e.confirm) {
-              //跳转登入
-              wx.switchTab({
-                url: '/pages/user/user',
-              })
-            }
-          }
-        })
-        return
-      }
-      s(e.data);
+      dofilter(e, s)
     },
     fail: function (e) {
       wx.hideLoading()
@@ -55,36 +64,9 @@ function uploadFile(url, filePath, name, s) {
       'Token': getApp().globalData.token
     },
     success: function (e) {
-      //UPLOAD拦截
-      console.log(e.data)
-      var data={}
-      try{
-         data = JSON.parse(e.data)
-      }catch(e){
-        data=JSON.parse(e)
-        data = JSON.parse(e.data)
-      }
-      if (data.status == 4003) {
-        wx.hideLoading()
-        wx.showModal({
-          title: '提示',
-          content: '你还未登入是否自动登入',
-          confirmText: '去登入',
-          success: function (e) {
-            //清空Token
-            getApp().globalData.token = '';
-            wx.setStorageSync('Token', '')
-            if (e.confirm) {
-              //跳转登入
-              wx.switchTab({
-                url: '/pages/user/user',
-              })
-            }
-          }
-        })
-        return
-      } 
-      s(data);
+      console.log()
+      e.data=JSON.parse(e.data)
+      dofilter(e, s)
     },
     fail: function (e) {
       wx.hideLoading()
@@ -102,28 +84,7 @@ function getRequest(url, s) {
       'Token': getApp().globalData.token
     },
     success: function (e) {
-      //GET拦截
-      if (e.data.status == 4003) {
-        wx.hideLoading()
-        wx.showModal({
-          title: '提示',
-          content: '你还未登入是否自动登入',
-          confirmText: '去登入',
-          success: function (e) {
-            //清空Token
-            getApp().globalData.token = '';
-            wx.setStorageSync('Token', '')
-            if (e.confirm) {
-              //跳转登入
-              wx.switchTab({
-                url: '/pages/user/user',
-              })
-            }
-          }
-        })
-        return
-      }
-      s(e.data);
+      dofilter(e, s)
     },
     fail: function (e) {
       wx.hideLoading()

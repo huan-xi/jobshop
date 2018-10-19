@@ -5,7 +5,6 @@
     "pages/user/user",
     "pages/editVender/editVender",
     "pages/position/position",
-    "pages/editPosition/editPosition",
     "pages/positionInfo/positionInfo"
   ],
   "window": {

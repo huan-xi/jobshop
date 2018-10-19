@@ -8,7 +8,7 @@ Page({
     typeIndex: 0,
     workTime: '',
     startTime: '',
-    endTime:'',
+    endTime: '',
     workType: ['计时', '计件'],
     workTypeIndex: 0,
     salatyType: ['元/小时', '元/2小时', '元/3小时', '元/4小时', '元/5小时', '元/6小时', '元/7小时', '元/8小时', '元/9小时', '元/10小时', '元/11小时', '元/12小时'],
@@ -34,7 +34,7 @@ Page({
       that.setData({
         startTime: util.formatTime(new Date()),
         workTime: util.formatTime(new Date()),
-        endTime:util.formatTimeAdd(new Date()),
+        endTime: util.formatTimeAdd(new Date()),
       })
       wxRequest.get(api.getTypes, e => {
         var types = []
@@ -59,8 +59,6 @@ Page({
     wx.chooseVideo({
       maxDuration: 60,
       success: function(res) {
-        console.log(res)
-        console.log(res.tempFilePath)
         if (res.size / res.duration > 300 * 1024) {
           wx.showModal({
             title: '提示',
@@ -97,8 +95,44 @@ Page({
       typeIndex: e.detail.value
     })
   },
-  submit: function() {
-
+  submit: function(thatdata,val,ossSrc) {
+    var that=this
+    //开始发布职位
+    wx.showLoading({
+      title: '正在发布职位',
+    })
+    wxRequest.post(api.publicPosition, {
+      "type": thatdata.types[thatdata.typeIndex],
+      "time": new Date(thatdata.workTime).getTime(),
+      "salary": val.salary,
+      "count": val.count,
+      "positionDesc": val.desc,
+      "videoSrc": ossSrc,
+      "salaryType": thatdata.salatyType[thatdata.salatyTypeIndex],
+    }, function (e) {
+      wx.hideLoading()
+      if (e.status == 1) {
+        console.log(e)
+        wx.showModal({
+          title: '提示',
+          content: '发布成功，你可以在两分钟之内做修改',
+          confirmText: "查看发布",
+          success: e => {
+            if (e.confirm) {
+              wx.switchTab({
+                url: '/pages/position/position',
+              })
+            }
+          }
+        })
+      } else {
+        wx.showModal({
+          title: '提示',
+          content: e.msg,
+          showCancel: false
+        })
+      }
+    })
   },
   formSubmit: function(e) {
     var val = e.detail.value
@@ -133,104 +167,28 @@ Page({
       })
       return
     }
-    //失败
-    function dofail(e) {
-      wx.hideLoading()
-      wx.showModal({
-        title: '提示',
-        content: e,
-        showCancel: false
-      })
-    }
+    //是否填信息
     if (thatdata.src && thatdata.src.length > 0) {
       //上传文件再提交
       wx.showLoading({
         title: '正在上传文件',
       })
-      wxRequest.uploadFile(api.uploadVideo, thatdata.src, 'video', function (e) {
+      wxRequest.uploadFile(api.uploadVideo, thatdata.src, 'video', function(e) {
         if (e.status == 1) {
           //成功
           wx.hideLoading()
           ossSrc = e.msg
-          //开始发布职位
-          wx.showLoading({
-            title: '正在发布职位',
-          })
-          wxRequest.post(api.publicPosition, {
-            "type": thatdata.types[thatdata.typeIndex],
-            "time": new Date(thatdata.workTime).getTime(),
-            "salary": val.salary,
-            "count": val.count,
-            "positionDesc": val.desc,
-            "videoSrc": ossSrc,
-            "salaryType": thatdata.salatyType[thatdata.salatyTypeIndex],
-          }, function (e) {
-            wx.hideLoading()
-            if (e.status == 1) {
-              wx.showModal({
-                title: '提示',
-                content: '发布成功，你可以在两分钟之内做修改',
-                confirmText:"查看发布",
-                success: e => {
-                  if(e.confirm){
-                    wx.switchTab({
-                      url: '/pages/position/position',
-                    })
-                  }
-                }
-              })
-            } else {
-              wx.showModal({
-                title: '提示',
-                content: "发布失败",
-                showCancel: false
-              })
-            }
-          })
+          that.submit(thatdata,val,ossSrc)
         } else {
-          dofail('上传视频失败')
+          wx.showModal({
+            title: '提示',
+            content: '上传视频失败',
+          })
+          return
         }
       });
-      //提交
       return
     }
-    //提交
-    //开始发布职位
-    wx.showLoading({
-      title: '正在发布职位',
-    })
-    wxRequest.post(api.publicPosition, {
-      "type": thatdata.types[thatdata.typeIndex],
-      "time": new Date(thatdata.workTime).getTime(),
-      "salary": val.salary,
-      "count": val.count,
-      "positionDesc": val.desc,
-      "videoSrc": ossSrc,
-      "salaryType": thatdata.salatyType[thatdata.salatyTypeIndex],
-    }, function(e) {
-      wx.hideLoading()
-      if (e.status == 1) {
-        console.log(e)
-        wx.showModal({
-          title: '提示',
-          content: '发布成功，你可以在两分钟之内做修改',
-          confirmText: "查看发布",
-          success: e => {
-            if (e.confirm) {
-              wx.switchTab({
-                url: '/pages/position/position',
-              })
-            }
-          }
-        })
-      } else {
-        wx.showModal({
-          title: '提示',
-          content: "发布失败",
-          showCancel: false
-        })
-      }
-    })
-
+    that.submit(thatdata, val,'')
   }
 })

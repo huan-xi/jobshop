@@ -53,6 +53,10 @@ Page({
             if (data.type == e.msg[i].sValue)
               typeIndex = i
           }
+          //视频回写
+          var src=''
+          if (data.videoSrc)
+            src=api.getImageSrc() + data.videoSrc 
           //计时方式回写
           var isByTiem = true
           var workTypeIndex = 0
@@ -71,7 +75,7 @@ Page({
           }
           that.setData({
             types: types,
-            src: data.videoSrc,
+            src: src,
             salary: data.salary,
             count: data.count,
             desc: data.positionDesc,
