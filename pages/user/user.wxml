@@ -14,7 +14,7 @@
       <text class='context'>{{vender.contacts?vender.contacts:'未填写'}}</text>
     </view>
     <view class='group'>
-      <text class='label-addr'>定位地址：</text>
+      <text class='label-a'>定位地址：</text>
       <text class='context'>{{vender.address?vender.address:'未填写'}}</text>
     </view>
     <view class='group'>

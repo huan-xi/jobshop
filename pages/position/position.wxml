@@ -1,13 +1,15 @@
-<view class='header'>
-    <view bindtap='notFinishTap'>
-      <text class="{{!isFinish?'active':''}}">未完成</text>
-    </view>
-    <view bindtap='finishTap'>
-      <text class="{{isFinish?'active':''}}">已完成</text>
-    </view>
-  </view>
 <view class='position-list'>
   <view wx:for="{{positions}}" wx:key="key" wx:for-index="index" wx:for-item="item" class='jobBox' id="{{item.positionId}}">
+    <i-count-down
+            id="{{index}}"
+            class='count-down'
+            target="{{item.createTime}}"
+            show-day="{{true}}"
+            countdown-class="big"
+            format="{{myFormat}}"
+            bindcallback="myLinsterner"
+            clear-timer="{{clearTimer}}"
+    ></i-count-down>
     <view>
       <text class='title'>{{item.type}}</text>
       <image class='editImage' id='{{item.positionId}}' bindtap='editTap' src='/images/edite.png'></image>
@@ -29,6 +31,7 @@
       <text class='desc'>状态</text>
       <text class='desc'>{{item.status}}</text>
     </view>
+    
   </view>
 </view>
 <view class="showerror" hidden='{{positions.length}}' bindtap='retryTap'>

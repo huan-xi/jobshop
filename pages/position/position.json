@@ -1,5 +1,8 @@
 {
     "navigationBarTitleText": "已经发布",
     "navigationBarTextStyle": "black",
-    "enablePullDownRefresh": true
+    "enablePullDownRefresh": true,
+    "usingComponents": {
+      "i-count-down": "/component/count-down/index"
+    }
   }

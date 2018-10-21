@@ -76,11 +76,7 @@ Page({
     try {
       var addressD = this.data.address
       console.log(addressD)
-      var address
-      if (addressD.address)
-        address = addressD.address + addressD.name
-      else
-        address = addressD.name
+      var  address = addressD.name
       wxRequest.post(api.editInfo, {
         phone: val.phone,
         name: val.name,

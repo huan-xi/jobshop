@@ -6,23 +6,7 @@ module.exports = {
   isLogin: function (s) {
     var that = this
     if (!getApp().globalData.token) {
-      wx.showModal({
-        title: '提示',
-        content: '您还未登入，是否登入',
-        showCancel: true,
-        confirmText: '登入',
-        success: function (res) {
-          if (res.confirm)
-            that.login(s);
-          else {
-            wx.switchTab({
-              url: '/pages/index/index',
-            })
-          }
-        },
-        fail: function (res) { },
-        complete: function (res) { },
-      })
+      that.login(s);  
     } else {
       s()
     }

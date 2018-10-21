@@ -1,3 +1,28 @@
+<i-panel class="cell-panel-demo" title="cell 组">
+    <i-cell-group>
+        <i-cell title="只显示箭头" is-link></i-cell>
+        <i-cell title="跳转到首页" is-link url="/pages/index/index"></i-cell>
+        <i-cell title="只有 footer 点击有效" is-link url="/pages/index/index" only-tap-footer></i-cell>
+        <block>
+            <i-cell title="单行列表" label="附加描述" value="详细信息"></i-cell>
+            <i-cell title="表单" is-link>
+                
+                <picker slot="footer" bindchange="bindTypeChange" range="{{types}}" value="{{typeIndex}}">
+              <view class="picker">
+                {{types[typeIndex]}}
+              </view>
+            </picker>
+            </i-cell>
+        </block>
+        <i-cell title="开关">
+            <i-switch value="{{ switch1 }}" bind:change="onChange" slot="footer">
+                <i-icon type="right" slot="open"></i-icon>
+                <i-icon type="close" slot="close"></i-icon>
+            </i-switch>
+        </i-cell>
+    </i-cell-group>
+</i-panel>
+
 <view class='index'>
   <view class='public'>
     <form bindsubmit="formSubmit">

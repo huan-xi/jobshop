@@ -4,6 +4,11 @@ page{
 .position-list{
   padding-bottom: 40rpx;
 }
+.count-down{
+  float: right;
+  right:70rpx;
+
+}
 .jobBox{
   margin-top: 20rpx;
   padding: 20rpx;
@@ -28,4 +33,9 @@ page{
 }
 .jobBox view{
   height: 40rpx;
+}
+.big{
+  font-size: 30rpx;
+  color: #3399FF;
+  font-weight: bold;
 }

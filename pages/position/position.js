@@ -11,34 +11,21 @@ Page({
    */
   data: {
     positions: [],
-    isFinish: false
-  },
-  notFinishTap: function (e) {
-    this.setData({
-      isFinish: false
-    })
-    page = 1
-    this.data.positions = []
-    this.refresh()
-  },
-  finishTap: function (e) {
-    this.setData({
-      isFinish: true
-    })
-    page = 1
-    this.data.positions = []
-    this.refresh()
+    targetTime: 0,
+    myFormat: ['天','时', '分', '秒'],
+    clearTimer: false
   },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-
+    console.log(new Date().getTime() )
   },
   editTap: function(e) {
     wx.navigateTo({
       url: `/pages/positionInfo/positionInfo?id=${e.target.id}`,
     })
+    console.log("tersdt")
   },
   refresh: function(hidden) {
     if(!hidden)
@@ -46,19 +33,20 @@ Page({
       title: '正在加载数据',
     })
     var that=this
-    var type=this.data.isFinish?0:1;
+    var type=0;
     wxRequest.get(api.getPositions(page, size,type), e => {
       wx.stopPullDownRefresh()
       wx.hideLoading()
-      console.log(e)
       if (e.status == 1) {
         total=e.msg.total
         //时间状态过滤
         var positions = e.msg.rows
         //返回状态信息状态过滤
         for (var i = 0; i < positions.length; i++) {
+          //时间过滤
+          positions[i].createTime = positions[i].time + 86400000;
           if (positions[i].status == 1) {
-            positions[i].positions = '正常'
+            positions[i].status = '正常'
           } else if (positions[i].status == 2) {
             positions[i].positions = '已完成'
           } else if (positions[i].status == 3) {
@@ -75,6 +63,14 @@ Page({
       }
     });
   },
+  myLinsterner:function(e){
+    var index = e.target.id;
+    var positions = this.data.positions;
+    positions[index].status='已结束'
+    this.setData({
+      positions: positions
+    })
+  },
   /**
    * 生命周期函数--监听页面显示
    */
@@ -86,7 +82,7 @@ Page({
 
   deleteTap: function(e) {
     var that=this
-    var id=e.currentTarget.id
+    var id=e.currentTarget.id  
     //删除
     wx.showModal({
       title: '提示',
@@ -139,11 +135,4 @@ Page({
     page++
     this.refresh()
   },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function() {
-
-  }
 })
