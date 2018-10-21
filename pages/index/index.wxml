@@ -1,34 +1,35 @@
-<i-panel class="cell-panel-demo" title="cell 组">
-    <i-cell-group>
-        <i-cell title="只显示箭头" is-link></i-cell>
-        <i-cell title="跳转到首页" is-link url="/pages/index/index"></i-cell>
-        <i-cell title="只有 footer 点击有效" is-link url="/pages/index/index" only-tap-footer></i-cell>
-        <block>
-            <i-cell title="单行列表" label="附加描述" value="详细信息"></i-cell>
-            <i-cell title="表单" is-link>
-                
-                <picker slot="footer" bindchange="bindTypeChange" range="{{types}}" value="{{typeIndex}}">
-              <view class="picker">
-                {{types[typeIndex]}}
-              </view>
-            </picker>
-            </i-cell>
-        </block>
-        <i-cell title="开关">
-            <i-switch value="{{ switch1 }}" bind:change="onChange" slot="footer">
-                <i-icon type="right" slot="open"></i-icon>
-                <i-icon type="close" slot="close"></i-icon>
-            </i-switch>
-        </i-cell>
-    </i-cell-group>
+<i-panel class="cell-panel-demo" title="填写招工信息">
+  <i-cell title="选择招工工种" is-link>
+    <picker slot="footer" bindchange="bindTypeChange" range="{{types}}" value="{{typeIndex}}">
+      <view class="picker">
+        {{types[typeIndex]}}
+      </view>
+    </picker>
+  </i-cell>
+  <i-cell title="填写招工人数">
+  <view slot="footer">
+  <i-row>
+    <i-col span="12" > <input name='count' type="number" placeholder='请输入招工人数'></input></i-col>
+    <i-col span="5" ><view>人</view></i-col>
+  </i-row>
+  </view>
+     
+  </i-cell>
+   <i-cell title="选择工作时间" is-link label="选择今天或者明天">
+    <picker slot="footer" bindchange="bindTypeChange" range="{{types}}" value="{{typeIndex}}">
+      <view class="picker">
+        {{types[typeIndex]}}
+      </view>
+    </picker>
+  </i-cell>
 </i-panel>
 
 <view class='index'>
   <view class='public'>
     <form bindsubmit="formSubmit">
       <view class='info'>
-      <!--  <view class='title'>职位信息</view>-->
-              <view class='group'>
+        <!--  <view class='title'>职位信息</view>-->
+        <view class='group'>
           <text class='label'>招工工种</text>
           <view class='rightBox'>
             <picker bindchange="bindTypeChange" range="{{types}}" value="{{typeIndex}}">
@@ -66,7 +67,7 @@
             <image src='/images/right.png'></image>
           </view>
         </view>
-        <view class='group'  wx:if="{{isByTiem}}">
+        <view class='group' wx:if="{{isByTiem}}">
           <text class='label'>大概工资:</text>
           <input class='salary' type="digit" name='salary' placeholder='请填写大概工资'></input>
           <picker class='unit' bindchange="bindPickerUnitChange" range="{{salatyType}}" value="{{salatyTypeIndex}}">
@@ -87,7 +88,7 @@
           <view class="" bindtap="chooseVideo">
             <image src='../../images/idCard.png' class='add'></image>
           </view>
-          
+
         </block>
         <block wx:if="{{src != ''}}">
           <video src="{{src}}" class="video"></video>
