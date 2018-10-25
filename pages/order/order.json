@@ -1,4 +1,10 @@
 {
   "navigationBarTitleText": "申请订单",
-  "navigationBarTextStyle": "black"
+  "navigationBarTextStyle": "black",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "i-tabs": "/component/tabs/index",
+    "i-tab": "/component/tab/index",
+    "abnor":"/component/abnor/index"
+  }
 }

@@ -64,7 +64,6 @@ Component({
                 if (!data.clearTimer) this.init.call(this);
             } else {
                 this.endfn();
-              return
             }
 
             if (data.showDay) {
@@ -76,20 +75,17 @@ Component({
             } else {
                 result = time;
             }
+          if (result =="00:00:00")
+            result = '已结束'
             this.setData({
                 time: result
             });
-
         },
         formatNum(num) {
             return num > 9 ? num : `0${num}`;
         },
         endfn() {
             this.triggerEvent('callback', {});
-            this.setData({
-              time: '已结束'
-          })
-            
         }
     }
 });

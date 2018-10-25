@@ -10,45 +10,65 @@ Page({
    */
   data: {
     orders: [],
-    isFinish:false
+    isFinish: false,
+    current: "finish"
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function(options) {
-
-  },
-  notFinishTap: function (e){
+  handleChange({ detail }) {
+    var isFinish=false
+    if (detail.key == 'finish')
+      isFinish = false
+    else
+      isFinish = true
     this.setData({
-      isFinish: false
-    })
+      isFinish: isFinish,
+      current: detail.key
+    });
     this.refresh()
   },
-  finishTap:function(e){
-    this.setData({
-      isFinish: true
+
+  deleteTap: function (e) {
+    var id = e.target.id
+    wx.showModal({
+      title: '提示',
+      content: '确定删除此订单',
+      success: e => {
+        if (e.confirm) {
+          wxRequest.get(api.deleteOrder(id), e => {
+            if (e.status == 1) {
+              wx.showToast({
+                title: e.msg,
+              })
+              this.refresh()
+            } else
+              wx.showModal({
+                title: '警告',
+                content: e.msg,
+                showCancel: false
+              })
+          })
+        }
+      }
     })
-    this.refresh()
   },
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function() {
+  onShow: function () {
     this.refresh();
   },
-  refresh: function() {
+  refresh: function (isPull) {
     var that = this
     wx.showLoading({
       title: '正在获取数据',
     })
-    var type=this.data.isFinish?0:1
-    wxRequest.get(api.getOrders(page, size,type), e => {
-      console.log(e)
+    var type = this.data.isFinish ? 0 : 1
+    wxRequest.get(api.getOrders(page, size, type), e => {
       wx.hideLoading()
+      if (isPull)
+        wx.stopPullDownRefresh()
       if (e.status == 1) {
         var orders = e.msg.rows
-        console.log(orders)
+        total = e.msg.total
         //返回状态信息状态过滤
         for (var i = 0; i < orders.length; i++) {
           orders[i].notFinish = true
@@ -57,7 +77,7 @@ Page({
               orders[i].pOrder.status = '该用户已接单，赶快联系他吧！'
               break
             case '3':
-              orders[i].notFinish=false
+              orders[i].notFinish = false
               orders[i].pOrder.status = '已完成！'
               break
             case '4':
@@ -66,9 +86,10 @@ Page({
               break
             case '5':
               orders[i].notFinish = false
-              orders[i].pOrder.status = '用户取消'
+              orders[i].pOrder.status = '已结束'
               break
             case '8':
+              orders[i].notFinish = false
               orders[i].pOrder.status = '您已取消'
               break
             default:
@@ -94,11 +115,42 @@ Page({
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function() {
+  onHide: function () {
 
   },
-
-  callTap: function(e) {
+  //完成按钮点击
+  finish: function (e) {
+    var id = e.target.id
+    var that = this
+    wx.showModal({
+      title: '提示',
+      content: '确定此订单已完成吗',
+      success: e => {
+        if (e.confirm) {
+          //提交完成请求
+          wx.showLoading({
+            title: '正在提交请求',
+          })
+          wxRequest.get(api.finishOrder(id), e => {
+            wx.hideLoading()
+            if (e.status == 1) {
+              wx.showToast({
+                title: '订单已完成',
+              })
+              that.refresh()
+            } else {
+              wx.showModal({
+                title: '提示',
+                content: e.msg,
+                showCancel: false
+              })
+            }
+          })
+        }
+      }
+    })
+  },
+  callTap: function (e) {
     wx.makePhoneCall({
       phoneNumber: e.currentTarget.id,
     })
@@ -107,31 +159,51 @@ Page({
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {
-
+  onPullDownRefresh: function () {
+    page = 1
+    this.data.orders = []
+    this.refresh(true)
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function() {
-    var that = this
-    console.log(page)
+  onReachBottom: function () {
     if (total % size == 0 && page >= total / size) return
     if (page > total / size) return
     page++
     this.refresh()
   },
-  cancelTap:function(e){
-    wxRequest.get(api.cancelOrder(e.target.id), e =>{
-      console.log(e)
+  cancelTap: function (e) {
+    var id = e.target.id
+    var that = this
+    wx.showModal({
+      title: '提示',
+      content: '取消前请确保和工人协商好，并且一天只能取消一次，确定要取消吗',
+      success: e => {
+        if (e.confirm) {
+          wxRequest.get(api.cancelOrder(id), e => {
+            if (e.status == 1) {
+              wx.showToast({
+                title: e.msg,
+              })
+              that.refresh()
+            } else {
+              wx.showModal({
+                title: '提示',
+                showCancel: false,
+                content: e.msg,
+              })
+            }
+          })
+        }
+      }
     })
-    console.log(e.target.id)
   },
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function() {
+  onShareAppMessage: function () {
 
   }
 })

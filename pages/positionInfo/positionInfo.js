@@ -12,7 +12,7 @@ Page({
     endTime: '',
     workType: ['计时', '计件'],
     workTypeIndex: 0,
-    salatyType: ['元/小时', '元/2小时', '元/3小时', '元/4小时', '元/5小时', '元/6小时', '元/7小时', '元/8小时', '元/9小时', '元/10小时', '元/11小时', '元/12小时'],
+    salatyType: ['1小时', '2小时', '3小时', '4小时', '5小时', '6小时', '7小时', '8小时', '9小时', '10小时', '11小时', '12小时'],
     salatyTypeIndex: 0,
     src: '',
     isByTiem: true, //是否是计时模式
@@ -35,7 +35,6 @@ Page({
     var that = this
     id = option.id
     wxRequest.get(api.getPosition(option.id), e => {
-      console.log(e)
       var data = e.msg
       //数据回写
       try {
@@ -86,7 +85,6 @@ Page({
           })
         })
       } catch (e) {
-        console.log(e)
         wx.showModal({
           title: '警告',
           content: '页面发生错误，请刷新后重试',
@@ -100,8 +98,6 @@ Page({
     wx.chooseVideo({
       maxDuration: 60,
       success: function(res) {
-        console.log(res)
-        console.log(res.tempFilePath)
         if (res.size / res.duration > 300 * 1024) {
           wx.showModal({
             title: '提示',
@@ -138,121 +134,40 @@ Page({
       typeIndex: e.detail.value
     })
   },
-  submit: function() {
-
-  },
-  formSubmit: function(e) {
-    var val = e.detail.value
-    var ossSrc = ''
-    var thatdata = this.data
-    var that = this
-    //数据校验
-    if (!val.count) {
-      wx.showModal({
-        title: '提示',
-        content: '请输入招工人数',
-        showCancel: false
-      })
-      return
-    }
-    if (this.data.isByTiem && !val.salary) {
-      wx.showModal({
-        title: '提示',
-        content: '请输入大概工资',
-        showCancel: false
-      })
-      return
-    }
-    if (!this.data.isByTiem) {
-      val.salary = -1;
-    }
-    if (!val.desc) {
-      wx.showModal({
-        title: '提示',
-        content: '请输入详细描述',
-        showCancel: false
-      })
-      return
-    }
-    //失败
-    function dofail(e) {
-      wx.hideLoading()
-      wx.showModal({
-        title: '提示',
-        content: e,
-        showCancel: false
-      })
-    }
-    if (thatdata.src && thatdata.src.length > 0) {
-      //上传文件再提交
-      wx.showLoading({
-        title: '正在上传文件',
-      })
-      wxRequest.uploadFile(api.uploadVideo, thatdata.src, 'video', function(e) {
-        if (e.status == 1) {
-          //成功
-          wx.hideLoading()
-          ossSrc = e.msg
-          //开始发布职位
-          wx.showLoading({
-            title: '正在修改职位信息',
-          })
-          wxRequest.post(api.editPosition, {
-            "positionId": id,
-            "type": thatdata.types[thatdata.typeIndex],
-            "time": new Date(thatdata.workTime).getTime(),
-            "salary": val.salary,
-            "count": val.count,
-            "positionDesc": val.desc,
-            "videoSrc": ossSrc,
-            "salaryType": thatdata.salatyType[thatdata.salatyTypeIndex],
-          }, function(e) {
-            wx.hideLoading()
-            if (e.status == 1) {
-              wx.showToast({
-                title: '修改成功',
-              })
-              wx.switchTab({
-                url: '/pages/position/position',
-              })
-            } else {
-              if (e.msg) {
-                wx.showModal({
-                  title: '提示',
-                  content: e.msg,
-                  showCancel: false
-                })
-              } else {
-                wx.showModal({
-                  title: '提示',
-                  content: "修改失败",
-                  showCancel: false
-                })
-              }
-            }
-          })
-        } else {
-          dofail('上传视频失败')
-        }
-      });
-      //提交
-      return
-    }
-    //提交
-    //开始发布职位
-    wx.showLoading({
-      title: '修改职位信息',
+  //输入框事件实现双向绑定
+  countInputChange: function (e) {
+    var count = e.detail.value
+    this.setData({
+      count: count
     })
-    wxRequest.post(api.editPosition, {
-      "positionId": id,
-      "type": thatdata.types[thatdata.typeIndex],
-      "time": new Date(thatdata.workTime).getTime(),
-      "salary": val.salary,
-      "count": val.count,
-      "positionDesc": val.desc,
+  },
+  salaryInputChange: function (e) {
+    var salary = e.detail.value
+    this.setData({
+      salary: salary
+    })
+  },
+  descInputChange: function (e) {
+    var desc = e.detail.detail.value
+    this.setData({
+      desc: desc
+    })
+  },
+  //提交信息
+  submit: function (data, val, ossSrc) {
+    var that = this
+    wx.showLoading({
+      title: '正在发布职位',
+    })
+    wxRequest.post(api.publicPosition, {
+      "type": data.types[data.typeIndex],
+      "time": new Date(data.workTime).getTime(),
+      "salary": data.salary,
+      "count": data.count,
+      "positionDesc": data.desc,
       "videoSrc": ossSrc,
-      "salaryType": thatdata.salatyType[thatdata.salatyTypeIndex],
-    }, function(e) {
+      "salaryType": "元/" + data.salatyType[data.salatyTypeIndex],
+    }, function (e) {
       wx.hideLoading()
       if (e.status == 1) {
         wx.showToast({
@@ -261,22 +176,64 @@ Page({
         wx.switchTab({
           url: '/pages/position/position',
         })
+       
       } else {
-        if (e.msg) {
-          wx.showModal({
-            title: '提示',
-            content: e.msg,
-            showCancel: false
-          })
+        wx.showModal({
+          title: '提示',
+          content: e.msg,
+          showCancel: false
+        })
+      }
+    })
+  },
+  //错误提示
+  tip: function (isNot, content) {
+    if (isNot) {
+      wx.showModal({
+        title: '提示',
+        content: content,
+        showCancel: false
+      })
+      return true
+    }
+  },
+  formSubmit: function (e) {
+    var ossSrc = ''
+    var data = this.data
+    var val = data.value
+    var that = this
+    //数据校验
+    if (that.tip(!data.count, '请输入招工人数'))
+      return
+    if (that.tip(data.isByTiem && !data.salary, '请输入大概工资'))
+      return
+    if (!data.isByTiem) {
+      data.salary = -1;
+    }
+    if (that.tip(!data.desc, '请输入详细描述'))
+      return
+    //是否填信息
+    if (data.src && data.src.length > 0) {
+      //上传文件再提交
+      wx.showLoading({
+        title: '正在上传文件',
+      })
+      wxRequest.uploadFile(api.uploadVideo, data.src, 'video', function (e) {
+        if (e.status == 1) {
+          //成功
+          wx.hideLoading()
+          ossSrc = e.msg
+          that.submit(data, val, ossSrc)
         } else {
           wx.showModal({
             title: '提示',
-            content: "修改失败",
-            showCancel: false
+            content: '上传视频失败',
           })
+          return
         }
-      }
-    })
-
+      });
+      return
+    }
+    that.submit(data, val, '')
   }
 })

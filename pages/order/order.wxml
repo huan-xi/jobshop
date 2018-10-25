@@ -1,14 +1,8 @@
 <view>
-  
-  
-  <view class='header'>
-    <view bindtap='notFinishTap'>
-      <text class="{{!isFinish?'active':''}}">未完成订单</text>
-    </view>
-    <view bindtap='finishTap'>
-      <text class="{{isFinish?'active':''}}">已完成订单</text>
-    </view>
-  </view>
+  <i-tabs current="{{ current }}" bindchange="handleChange">
+    <i-tab key="finish" title="已完成订单"></i-tab>
+    <i-tab key="notFinish" title="未完成订单"></i-tab>
+  </i-tabs>
   <view class='orderList'>
     <view class='orderBox' wx:for="{{orders}}" wx:key="key">
       <view id='{{item.position.positionId}}' bindtap='orderTap'>
@@ -30,19 +24,16 @@
         </view>
         <view class='rightBox'>
           <view class='block-btn' hidden='{{item.cancel||!item.notFinish}}' hover-class='block-btn-hover' id='{{item.pOrder.orderId}}' bindtap='cancelTap'>取消订单</view>
-          <view wx:if="{{item.notFinish}}" bindtap='finishTap' hover-class='block-btn-hover' id='{{item.pOrder.orderId}}' class='block-btn'>完成订单</view>
+          <view wx:if="{{item.notFinish}}" bindtap='finish' hover-class='block-btn-hover' id='{{item.pOrder.orderId}}' class='block-btn'>完成订单</view>
           <view wx:elif="{{item.notCom}}" bindtap='commonTap' hover-class='block-btn-hover' id='{{item.pOrder.orderId}}' class='block-btn'>评价</view>
-          <view bindtap='deleteTap' hidden='{{item.notFinish}}' hover-class='block-btn-hover' id='{{item.orderId}}' class='block-btn'>删除订单</view>
+          <view bindtap='deleteTap' id='{{item.pOrder.orderId}}' hidden='{{item.notFinish}}' hover-class='block-btn-hover' class='block-btn'>删除订单</view>
         </view>
       </view>
     </view>
   </view>
   <view>
-    <view class="showerror" hidden='{{orders.length}}' bindtap='retryTap'>
-      <image src="/images/no.png" style="height:100rpx;width:100rpx"></image>
-      <view class="errortext">
-        没有订单,下拉试试
-      </view>
+    <view hidden='{{orders.length}}'>
+      <abnor type="DATA" title="没有订单,下拉试试"></abnor>
     </view>
   </view>
 </view>

@@ -38,5 +38,13 @@ module.exports={
   //删除职位信息
   deletePosition:function(id){
     return url +`/deletePosition?positionId=${id}`
+  },
+  //删除订单
+  deleteOrder:function(id){
+    return url +`/deleteOrder?orderId=${id}`
+  },
+  //完成订单
+  finishOrder:function(id){
+    return url + `/finishOrder?orderId=${id}`
   }
 }

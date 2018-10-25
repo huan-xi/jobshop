@@ -1,14 +1,16 @@
 <view class='position-list'>
   <view wx:for="{{positions}}" wx:key="key" wx:for-index="index" wx:for-item="item" class='jobBox' id="{{item.positionId}}">
     <i-count-down
-            id="{{index}}"
+            data-index="{{index}}"
             class='count-down'
-            target="{{item.createTime}}"
-            show-day="{{true}}"
+            target="{{item.targetTime}}"
+            show-day="{{false}}"
             countdown-class="big"
             format="{{myFormat}}"
             bindcallback="myLinsterner"
             clear-timer="{{clearTimer}}"
+            bindtap='editTap' 
+            id='{{item.positionId}}'
     ></i-count-down>
     <view>
       <text class='title'>{{item.type}}</text>

@@ -1,134 +1,15 @@
-page {
-  background-color: rgba(250,250,250,0.90);
+page{
+  background-color: #f8f8f9
 }
-.btn{
-  background-color: #1296db;
-}/**index.wxss**/
-.index{
-  min-height: 100%;
-}
- .title{
-  text-align: center;
-}
-.list{
-  padding:25rpx 0;
-  
-}
-.select{
-  border: solid 1rpx #1296db !important;
-  color: #1296db !important;
-}
-.list view{
-  float: left;
-  border: solid 1rpx gray;
-  padding: 15rpx 50rpx;
-  margin: 10rpx;
-  font-size: 25rpx;
-  color: gray;
-  border-radius: 25rpx;
-}
-.list:after {
-  content: ".";
-  display: block;
-  height: 0;
-  clear: both;
-  visibility: hidden;
-}
-.group{
-  padding: 30rpx 30rpx;
-  position: relative;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  align-items: center;
-  font-size: 30rpx;
-  border-bottom: solid 1rpx rgba(182, 182, 182, 0.527);
-}
-.header view {
-  display: inline-block;
-  text-align: center;
-  width: 50%;
-  background-color: white;
-}
-.header text{
-  color: rgb(95, 95, 95);
-  font-size: 30rpx;
-  display: inline-block;
-  padding: 10rpx 0;
-  border-bottom: solid 2px white;
-}
-.active{
-  color: black !important;
-  border-bottom: solid 2px #1296db !important;
-}
-.public{
-  padding: 0 25rpx;
-}
-.rightBox{
-  position: absolute;
-  right:55rpx;
-}
-.rightBox picker,.rightBox view{
-  margin-top: 5rpx;
-  float: left;
-}
-
-.label {
-  display: inline-block;
-  color: gray;
-}
-.group image{
-  width: 50rpx;
-  height: 50rpx;
-}
-.detail{
-  padding: 20rpx 30rpx;
-  font-size: 30rpx;
-  color: gray
-}
-.detail textarea{
-  height: 150rpx;
-  font-size: 28rpx;
-  margin-top: 10rpx;
-  padding-left: 10rpx;
-}
+/*发布/修改职位css */
 .add,.video{
   width: 100%;
   height: 250rpx;
   margin:25rpx 0; 
 }
 .uploadVideo{
-  padding: 0 20rpx;
+  padding: 0 30rpx;
 }
-.unit{
-  margin-left: 10rpx;
-}
-.group .salary{
-  position: absolute;
-  right: 250rpx;
-}
-.group .unit{
-  position: absolute;
-  right: 100rpx;
-}
-.group .salary-right{
-  position: absolute;
-  right: 50rpx;
-}
-.reChoose{
-  margin-bottom: 20rpx;
-}
-.showerror {
-  text-align: center;
-  font-weight: normal;
-  font-size: 30rpx;
-  line-height: 40rpx;
-  color: #757575;
-  margin-top: 100rpx;
-}
-.errortext {
-  margin-top: 50rpx;
-  table-layout: center;
+input{
+  width: 250rpx;
 }

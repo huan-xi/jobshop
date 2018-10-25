@@ -5,9 +5,8 @@ page{
   padding-bottom: 40rpx;
 }
 .count-down{
-  float: right;
+  position: absolute;
   right:70rpx;
-
 }
 .jobBox{
   margin-top: 20rpx;

@@ -7,6 +7,7 @@
     "i-input": "/component/input/index",
     "i-panel": "/component/panel/index",
     "i-row": "/component/row/index",
+    "i-button": "/component/button/index",
     "i-col": "/component/col/index"
   }
 }

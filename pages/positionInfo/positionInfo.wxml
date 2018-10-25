@@ -1,74 +1,55 @@
-<view class='index'>
-  <view class='public'>
-    <form bindsubmit="formSubmit">
-      <view class='info'>
-      <!--  <view class='title'>职位信息</view>-->
-              <view class='group'>
-          <text class='label'>招工工种</text>
-          <view class='rightBox'>
-            <picker bindchange="bindTypeChange" range="{{types}}" value="{{typeIndex}}">
-              <view class="picker">
-                {{types[typeIndex]}}
-              </view>
-            </picker>
-            <image src='/images/right.png'></image>
-          </view>
+<i-panel title="修改招工信息">
+  <i-cell-group>
+    <i-cell title="选择招工工种" is-link label="修改人数不能小于已经招工人数">
+      <picker slot="footer" bindchange="bindTypeChange" range="{{types}}" value="{{typeIndex}}">
+        <view class="picker">
+          {{types[typeIndex]}}
         </view>
-        <view class='group'>
-          <text class='label'>招工人数:</text>
-          <input class='count' name='count' value='{{count}}' type="number" placeholder='请输入招工人数'></input>
-          <view class='unit'>人</view>
+      </picker>
+    </i-cell>
+    <i-cell title="填写招工人数">
+        <input slot="footer" autofocus value='{{count}}' type="number" bindinput='countInputChange' placeholder='请输入招工人数'></input>
+    </i-cell>
+    <i-cell title="选择工作时间" is-link label="选择今天或者明天">
+      <picker slot="footer" start="{{startTime}}" end="{{endTime}}" bindchange="bindTimePickerChange" mode="date" value="{{workTime}}">
+        <view class="picker">
+          {{workTime}}
         </view>
-        <view class='group'>
-          <text class='label'>工作时间</text>
-          <view class='rightBox'>
-            <picker start="{{startTime}}" end="{{endTime}}" bindchange="bindTimePickerChange" mode="date" value="{{workTime}}">
-              <view class="picker">
-                {{workTime}}
-              </view>
-            </picker>
-            <image src='/images/right.png'></image>
-          </view>
+      </picker>
+    </i-cell>
+    <i-cell title="选择计价方式" is-link>
+      <picker slot="footer" bindchange="bindPickerChange" range="{{workType}}" value="{{workTypeIndex}}">
+        <view>
+          {{workType[workTypeIndex]}}
         </view>
-        <view class='group'>
-          <text class='label'>计费方式</text>
-          <view class='rightBox'>
-            <picker bindchange="bindPickerChange" range="{{workType}}" value="{{workTypeIndex}}">
-              <view class="picker">
-                {{workType[workTypeIndex]}}
-              </view>
-            </picker>
-            <image src='/images/right.png'></image>
-          </view>
+      </picker>
+    </i-cell>
+    <i-cell title="请填写工资">
+        <input slot="footer" type="digit" value='{{salary}}' bindinput='salaryInputChange' placeholder='请填写工资'></input>
+    </i-cell>
+    <i-cell title="选择工种时长" is-link label="最长12小时">
+      <picker slot="footer" bindchange="bindPickerUnitChange" range="{{salatyType}}" value="{{salatyTypeIndex}}">
+        <view class="picker">
+          {{salatyType[salatyTypeIndex]}}
         </view>
-        <view class='group'  wx:if="{{isByTiem}}">
-          <text class='label'>大概工资:</text>
-          <input class='salary' value='{{salary}}' type="digit" name='salary' placeholder='请填写大概工资'></input>
-          <picker class='unit' bindchange="bindPickerUnitChange" range="{{salatyType}}" value="{{salatyTypeIndex}}">
-            <view class="picker">
-              {{salatyType[salatyTypeIndex]}}
-            </view>
-          </picker>
-          <image class='salary-right' src='/images/right.png'></image>
+      </picker>
+    </i-cell>
+    <i-panel>
+      <i-input bindchange="descInputChange" value='{{desc}}' type="textarea" title="工种详细描述" placeholder="工种详细描述(最多100字)" maxlength="100" />
+    </i-panel>
+  </i-cell-group>
+  <i-panel title="添加视频(可选)">
+    <view class="uploadVideo">
+      <block wx:if="{{src === ''}}">
+        <view class="" bindtap="chooseVideo">
+          <image src='../../images/idCard.png' class='add'></image>
         </view>
-        <view class='detail'>
-          <view>详细描述</view>
-          <textarea name='desc' value='{{desc}}' placeholder='请填写工作详细描述信息'></textarea>
-        </view>
-      </view>
-      <view class="uploadVideo">
-        <view class="label">添加视频</view>
-        <block wx:if="{{src === ''}}">
-          <view class="" bindtap="chooseVideo">
-            <image src='../../images/idCard.png' class='add'></image>
-          </view>
-        </block>
-        <block wx:if="{{src != ''}}">
-          <video src="{{src}}" class="video"></video>
-          <button bindtap="chooseVideo" class='reChoose'>重新选择</button>
-        </block>
-      </view>
-      <button formType="submit" class="btn">确定修改</button>
-    </form>
-  </view>
-</view>
+      </block>
+      <block wx:if="{{src != ''}}">
+        <video src="{{src}}" class="video"></video>
+        <i-button bind:click="chooseVideo" type="ghost">重新选择</i-button>
+      </block>
+    </view>
+  </i-panel>
+  <i-button bind:click="formSubmit" type="primary" shape="circle">确定发布</i-button>
+</i-panel>

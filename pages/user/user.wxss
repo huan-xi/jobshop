@@ -22,5 +22,8 @@
 .label-addr{
   min-width: 240rpx;
 }
+.label-a{
+  min-width: 200rpx;
+}
 
  

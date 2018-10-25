@@ -4,47 +4,47 @@ var wxRequest = require('../../utils/wxRequest.js')
 var util = require('../../utils/util.js')
 var page = 1
 var size = 5
-var total=0
+var total = 0
 Page({
   /**
    * 页面的初始数据
    */
   data: {
     positions: [],
-    targetTime: 0,
-    myFormat: ['天','时', '分', '秒'],
+    myFormat: ['时', '分', '秒'],
     clearTimer: false
   },
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function(options) {
-    console.log(new Date().getTime() )
+  onLoad: function (options) {
   },
-  editTap: function(e) {
+  editTap: function (e) {
     wx.navigateTo({
       url: `/pages/positionInfo/positionInfo?id=${e.target.id}`,
     })
-    console.log("tersdt")
   },
-  refresh: function(hidden) {
-    if(!hidden)
-    wx.showLoading({
-      title: '正在加载数据',
-    })
-    var that=this
-    var type=0;
-    wxRequest.get(api.getPositions(page, size,type), e => {
+  refresh: function (hidden) {
+    if (!hidden)
+      wx.showLoading({
+        title: '正在加载数据',
+      })
+    var that = this
+    var type = 0;
+    wxRequest.get(api.getPositions(page, size, type), e => {
       wx.stopPullDownRefresh()
       wx.hideLoading()
       if (e.status == 1) {
-        total=e.msg.total
+        total = e.msg.total
         //时间状态过滤
         var positions = e.msg.rows
         //返回状态信息状态过滤
         for (var i = 0; i < positions.length; i++) {
-          //时间过滤
-          positions[i].createTime = positions[i].time + 86400000;
+          //倒计时处理
+          if (new Date().getTime() - positions[i].createTime > 120000)
+            positions[i].targetTime = positions[i].createTime + 43200000;
+          else
+            positions[i].targetTime = positions[i].createTime + 120000;
           if (positions[i].status == 1) {
             positions[i].status = '正常'
           } else if (positions[i].status == 2) {
@@ -63,10 +63,15 @@ Page({
       }
     });
   },
-  myLinsterner:function(e){
-    var index = e.target.id;
+  myLinsterner: function (e) {
+    var index = e.target.dataset.index;
     var positions = this.data.positions;
-    positions[index].status='已结束'
+    if (new Date().getTime() - positions[index].createTime > 1200000)
+      positions[index].status = '已结束'
+    else
+      wx.reLaunch({
+        url: '/pages/position/position',
+      })
     this.setData({
       positions: positions
     })
@@ -74,15 +79,15 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function() {
-    page=1
+  onShow: function () {
+    page = 1
     this.data.positions = []
     this.refresh();
   },
 
-  deleteTap: function(e) {
-    var that=this
-    var id=e.currentTarget.id  
+  deleteTap: function (e) {
+    var that = this
+    var id = e.currentTarget.id
     //删除
     wx.showModal({
       title: '提示',
@@ -94,22 +99,21 @@ Page({
             title: '正在删除',
           })
           //开始删除
-          wxRequest.get(api.deletePosition(id),e =>{
+          wxRequest.get(api.deletePosition(id), e => {
             wx.hideLoading()
-            if(e.status==1)
-              {
-                wx.showToast({
-                  title: '删除成功',
-                })
-                page=1
-                that.data.positions=[]
-                that.refresh()
-              }else
-                wx.showModal({
-                  title: '提示',
-                  content: e.msg,
-                })
-              
+            if (e.status == 1) {
+              wx.showToast({
+                title: '删除成功',
+              })
+              page = 1
+              that.data.positions = []
+              that.refresh()
+            } else
+              wx.showModal({
+                title: '提示',
+                content: e.msg,
+              })
+
           })
         }
       }
@@ -118,18 +122,17 @@ Page({
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function() {
+  onPullDownRefresh: function () {
     page = 1
-    this.data.positions=[]
+    this.data.positions = []
     this.refresh(true)
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function() {
+  onReachBottom: function () {
     var that = this
-    console.log(page)
     if (total % size == 0 && page >= total / size) return
     if (page > total / size) return
     page++

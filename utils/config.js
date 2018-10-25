@@ -4,4 +4,4 @@ var imageHost = "https://huanxi-candy.oss-cn-qingdao.aliyuncs.com/";
 export default {
   getDomain: DOMAIN,
   getImageHost: imageHost,
-}
+} 
