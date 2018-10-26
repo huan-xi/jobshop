@@ -112,9 +112,6 @@ Page({
       }
     })
   },
-  bindPickerUnitChange: function(e) {
-
-  },
   bindPickerChange: function(e) {
     var isByTiem;
     if (e.detail.value != 0) isByTiem = false
@@ -157,9 +154,10 @@ Page({
   submit: function (data, val, ossSrc) {
     var that = this
     wx.showLoading({
-      title: '正在发布职位',
+      title: '正在修改职位',
     })
-    wxRequest.post(api.publicPosition, {
+    wxRequest.post(api.editPosition, {
+      "positionId": id,
       "type": data.types[data.typeIndex],
       "time": new Date(data.workTime).getTime(),
       "salary": data.salary,
@@ -213,7 +211,7 @@ Page({
     if (that.tip(!data.desc, '请输入详细描述'))
       return
     //是否填信息
-    if (data.src && data.src.length > 0) {
+    if (data.src && data.src.length > 0 && data.src.search("//tmp") != -1) {
       //上传文件再提交
       wx.showLoading({
         title: '正在上传文件',

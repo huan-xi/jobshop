@@ -36,9 +36,8 @@
     
   </view>
 </view>
-<view class="showerror" hidden='{{positions.length}}' bindtap='retryTap'>
-  <image src="/images/no.png" style="height:100rpx;width:100rpx"></image>
-  <view class="errortext">
-    没有订单,下拉试试
-  </view>
+<view class="showerror" hidden='{{positions.length}}'>
+  <view hidden='{{orders.length}}'>
+      <abnor type="DATA" title="没有发布职位信息,下拉试试"></abnor>
+    </view>
 </view>
