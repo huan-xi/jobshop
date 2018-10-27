@@ -6,7 +6,7 @@
   <view class='orderList'>
     <view class='orderBox' wx:for="{{orders}}" wx:key="key">
       <view id='{{item.position.positionId}}' bindtap='orderTap'>
-        <view>{{item.position.type}}</view>
+        <view class='title'>{{item.position.type}}</view>
         <view>
           <view class='desc'>状态： {{item.pOrder.status}}</view>
         </view>

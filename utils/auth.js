@@ -7,9 +7,7 @@ module.exports = {
     var that = this
     if (!getApp().globalData.token) {
       that.login(s);  
-    } else {
-      s()
-    }
+    } 
   },
   login: function (s) {
     wx.showLoading({

@@ -5,12 +5,12 @@
     "pages/user/user",
     "pages/editVender/editVender",
     "pages/position/position",
-    "pages/positionInfo/positionInfo"
+    "pages/positionInfo/positionInfo",
+    "pages/feedback/feedback"
   ],
   "window": {
     "navigationBarBackgroundColor": "#1296db"
   },
- 
   "tabBar": {
     "selectedColor": "#1296db",
     "list": [

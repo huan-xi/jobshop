@@ -4,6 +4,6 @@
 .addr{
   color: gray;
 }
-form .btn{
-  margin-top: 200rpx;
+.sava{
+  margin-top: 350rpx;
 }

@@ -1,6 +1,3 @@
-page{
-  background-color:  rgba(215, 215, 215, 0.2);
-}
 .position-list{
   padding-bottom: 40rpx;
 }
@@ -11,7 +8,11 @@ page{
 .jobBox{
   margin-top: 20rpx;
   padding: 20rpx;
-  background-color: white;
+  overflow: hidden;
+  position: relative;
+  background: #fff;
+  border: 1rpx solid #dddee1;
+  border-radius: 5px;
 }
 .salary{
   float: right;

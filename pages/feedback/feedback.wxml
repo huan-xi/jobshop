@@ -1,0 +1,14 @@
+<view class='feedback'>
+<i-panel title="填写反馈信息">
+ <textarea  placeholder="请填写反馈的详细信息" value='{{text}}' bindinput='textInput' placeholder-class='placeholder-class' class='input'></textarea>
+</i-panel>
+</view>
+<i-panel>
+  <i-input value="{{ contact }}" bind:change='contactInput' type="textarea" title="联系方式" placeholder="手机号/微信/qq/邮箱（请备注）" />
+</i-panel>
+<view class='btn'>
+  <i-button bind:click="formSubmit" type="info" shape="circle">提交反馈</i-button>
+</view>
+ <view class='btn'>
+  <i-button bind:click="formSubmit" shape="circle">联系客服 {{phone}}({{name}})</i-button>
+</view>

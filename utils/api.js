@@ -46,5 +46,9 @@ module.exports={
   //完成订单
   finishOrder:function(id){
     return url + `/finishOrder?orderId=${id}`
-  }
+  },
+  //提交反馈信息
+  feedback: config.getDomain +"/public/feedback",
+  //获取客服信息
+  getServiceInfo: config.getDomain + "/public/getServiceInfo"
 }

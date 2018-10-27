@@ -30,58 +30,72 @@ Page({
       },
     })
   },
+  //双向绑定
+  nameInputChange:function(e){
+    var vender=this.data.vender
+    vender.name =e.detail.detail.value
+    this.setData({
+      vender
+    })
+  },
+  contactsInputChange: function (e) {
+    var vender = this.data.vender
+    vender.contacts = e.detail.detail.value
+    this.setData({
+      vender
+    })
+  },
+  phoneInputChange: function (e) {
+    var vender = this.data.vender
+    vender.phone = e.detail.detail.value
+    this.setData({
+      vender
+    })
+  },
+  address_descInputChange: function (e) {
+    var vender = this.data.vender
+    vender.addressDesc = e.detail.detail.value
+    this.setData({
+      vender
+    })
+  },
+  //错误提示
+  tip: function (isNot, content) {
+    if (isNot) {
+      wx.showModal({
+        title: '提示',
+        content: content,
+        showCancel: false
+      })
+      return true
+    }
+  },
   formSubmit: function(e) {
     //数据校验
-    var val = e.detail.value
-    if (val.name.length < 3) {
-      wx.showModal({
-        title: '提示',
-        content: '公司名至少三个字',
-      })
+    var val = this.data.vender
+    if (this.tip(val.name.length < 3, '公司名至少三个字')) 
+        return
+    if (this.tip(val.contacts.length < 2, '请填写正确的联系人名字')) 
       return
-    }
-    if (val.contacts.length < 2) {
-      wx.showModal({
-        title: '提示',
-        content: '请输入真确的联系人名字',
-      })
-      return
-    }
-    if (val.phone.length != 11) {
-      wx.showModal({
-        title: '提示',
-        content: '请输入正确格式手机号',
-      })
+    if (this.tip(val.phone.length != 11, '请填写正确的手机号'))
       return;
-    }
     var addressV = this.data.address;
-    if (!(addressV.name && addressV.latitude && addressV.longitude)) {
-      wx.showModal({
-        title: '提示',
-        content: '请选择公司所在地址',
-      })
+    if (this.tip(!(addressV.name && addressV.latitude && addressV.longitude), '请选择公司所在地址'))
       return;
-    }
-    if (val.address_desc.length < 5) {
-      wx.showModal({
-        title: '提示',
-        content: '请输入地址详细描述(至少五个字)',
-      })
+    if (this.tip(val.addressDesc.length < 5, '请输入地址详细描述(至少五个字)'))
       return;
-    }
     //提交信息  
     wx.showLoading({
       title: '正在提交信息',
     })
     try {
       var addressD = this.data.address
-      console.log(addressD)
       var  address = addressD.name
       wxRequest.post(api.editInfo, {
         phone: val.phone,
         name: val.name,
         contacts: val.contacts,
-        addressDesc: val.address_desc,
+        addressDesc: val.addressDesc,
         address: address,
         latitude: addressD.latitude,
         longitude: addressD.longitude
@@ -113,13 +127,6 @@ Page({
     }
 
   },
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function() {
-
-  },
-
   onChangeAddress: function() {
     var that = this
     wx.chooseLocation({
@@ -128,7 +135,6 @@ Page({
           that.setData({
             address: res
           })
-        console.log(res)
       },
     })
   },

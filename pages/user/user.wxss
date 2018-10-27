@@ -1,29 +1,6 @@
- .title{
-  text-align: center;
-}
-.group{
-  padding: 30rpx 30rpx;
-  position: relative;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  align-items: center;
-  font-size: 35rpx;
-  border-bottom: solid 1rpx rgba(182, 182, 182, 0.527);
-}
 .info{
-  padding: 50rpx 50rpx;
+  margin: 50rpx 0;
 }
-.btn{
-  margin-top: 150rpx;
+.card-demo open-data {
+  border-radius: 50%;
 }
-.label-addr{
-  min-width: 240rpx;
-}
-.label-a{
-  min-width: 200rpx;
-}
-
- 

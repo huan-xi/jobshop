@@ -1,7 +1,11 @@
 {
-        "navigationBarTitleText": "公司信息",
-        "navigationBarTextStyle": "black",
-        "usingComponents": {
-            "abnor": "/component/abnor/index"
-        }
+  "navigationBarTitleText": "公司信息",
+  "navigationBarTextStyle": "black",
+  "usingComponents": {
+    "i-cell-group": "/component/cell-group/index",
+    "i-cell": "/component/cell/index",
+    "i-panel": "/component/panel/index",
+    "i-icon": "/component/icon/index",
+    "i-card": "/component/card/index"
+  }
 }

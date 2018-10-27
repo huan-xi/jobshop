@@ -8,7 +8,7 @@
       </picker>
     </i-cell>
     <i-cell title="填写招工人数">
-        <input  slot="footer" autofocus type="number" bindinput='countInputChange' placeholder='请输入招工人数'></input>
+      <input slot="footer" autofocus type="number" bindinput='countInputChange' placeholder='请输入招工人数'></input>
     </i-cell>
     <i-cell title="选择工作时间" is-link label="选择今天或者明天">
       <picker slot="footer" start="{{startTime}}" end="{{endTime}}" bindchange="bindTimePickerChange" mode="date" value="{{workTime}}">
@@ -17,17 +17,17 @@
         </view>
       </picker>
     </i-cell>
-    <i-cell title="选择计价方式" is-link>
+    <i-cell title="选择计价方式" is-link label="选择记件请在工种描述中填写">
       <picker slot="footer" bindchange="bindPickerChange" range="{{workType}}" value="{{workTypeIndex}}">
         <view>
           {{workType[workTypeIndex]}}
         </view>
       </picker>
     </i-cell>
-    <i-cell title="请填写工资">
-        <input slot="footer" type="digit"  bindinput='salaryInputChange' placeholder='请填写工资'></input>
+    <i-cell title="请填写工资" wx:if="{{isByTiem}}">
+      <input slot="footer" type="digit" bindinput='salaryInputChange' placeholder='请填写工资'></input>
     </i-cell>
-    <i-cell title="选择工种时长" is-link label="最长12小时">
+    <i-cell title="选择工种时长" is-link label="最长12小时" wx:if="{{isByTiem}}">
       <picker slot="footer" bindchange="bindPickerUnitChange" range="{{salatyType}}" value="{{salatyTypeIndex}}">
         <view class="picker">
           {{salatyType[salatyTypeIndex]}}
@@ -35,7 +35,7 @@
       </picker>
     </i-cell>
     <i-panel>
-      <i-input auto-height bindchange="descInputChange"  type="textarea" title="工种详细描述" placeholder="工种详细描述(最多100字)" maxlength="100" />
+      <i-input auto-height bindchange="descInputChange" type="textarea" title="工种详细描述" placeholder="工种详细描述(最多100字)" maxlength="100" />
     </i-panel>
   </i-cell-group>
   <i-panel title="添加视频(可选)">
