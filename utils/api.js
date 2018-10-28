@@ -50,5 +50,7 @@ module.exports={
   //提交反馈信息
   feedback: config.getDomain +"/public/feedback",
   //获取客服信息
-  getServiceInfo: config.getDomain + "/public/getServiceInfo"
+  getServiceInfo: config.getDomain + "/public/getServiceInfo",
+  //get notice
+  getNotice: config.getDomain +"/public/getVenderNotice"
 }

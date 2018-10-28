@@ -6,6 +6,7 @@
     "i-cell": "/component/cell/index",
     "i-panel": "/component/panel/index",
     "i-input": "/component/input/index",
-    "i-button": "/component/button/index"
+    "i-button": "/component/button/index",
+    "i-notice-bar": "/component/notice-bar/index"
   }
 }

@@ -10,6 +10,7 @@
             bindcallback="myLinsterner"
             clear-timer="{{clearTimer}}"
             bindtap='editTap' 
+            target2="{{item.targetTime2}}"
             id='{{item.positionId}}'
     ></i-count-down>
     <view>

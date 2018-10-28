@@ -10,5 +10,5 @@
   <i-button bind:click="formSubmit" type="info" shape="circle">提交反馈</i-button>
 </view>
  <view class='btn'>
-  <i-button bind:click="formSubmit" shape="circle">联系客服 {{phone}}({{name}})</i-button>
+  <i-button bind:click="makeCall" shape="circle">联系客服 {{phone}}({{name}})</i-button>
 </view>

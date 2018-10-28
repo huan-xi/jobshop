@@ -1,7 +1,7 @@
 <view>
   <i-tabs current="{{ current }}" bindchange="handleChange">
-    <i-tab key="finish" title="已完成订单"></i-tab>
-    <i-tab key="notFinish" title="未完成订单"></i-tab>
+    <i-tab key="finish" title="未完成订单"></i-tab>
+    <i-tab key="notFinish" title="已完成订单"></i-tab>
   </i-tabs>
   <view class='orderList'>
     <view class='orderBox' wx:for="{{orders}}" wx:key="key">

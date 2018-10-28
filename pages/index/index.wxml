@@ -1,3 +1,15 @@
+<view wx:if='{{notice}}'>
+  <view wx:if="{{loop}}">
+    <i-notice-bar icon="systemprompt" closable loop>
+      {{notice}}
+    </i-notice-bar>
+  </view>
+  <view wx:else>
+    <i-notice-bar icon="systemprompt" closable>
+      {{notice}}
+    </i-notice-bar>
+  </view>
+</view>
 <i-panel title="填写招工信息 (发布消息后两分钟之内可修改)">
   <i-cell-group>
     <i-cell title="选择招工工种" is-link>

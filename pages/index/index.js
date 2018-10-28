@@ -9,9 +9,11 @@ Page({
     workTime: '',
     startTime: '',
     endTime: '',
-    count:0,
-    desc:'',
-    salary:'',
+    count: 0,
+    desc: '',
+    notice: '',
+    loop: false,
+    salary: '',
     workType: ['计时', '计件'],
     workTypeIndex: 0,
     salatyType: ['1小时', '2小时', '3小时', '4小时', '5小时', '6小时', '7小时', '8小时', '9小时', '10小时', '11小时', '12小时'],
@@ -27,6 +29,28 @@ Page({
       workTime: e.detail.value
     })
   },
+  onLoad: function() {
+    wxRequest.get(api.getTypes, e => {
+      var types = []
+      for (var i = 0; i < e.msg.length; i++) {
+        types.push(e.msg[i].sValue)
+      }
+      this.setData({
+        types: types,
+      })
+    })
+    wxRequest.get(api.getNotice, e => {
+      if (e.status == 1) {
+        var loop = false
+        if (e.msg.length > 20)
+          loop = true
+        this.setData({
+          notice: e.msg,
+          loop,
+        })
+      }
+    })
+  },
   /**
    * 生命周期函数--监听页面显示
    */
@@ -38,15 +62,6 @@ Page({
         startTime: util.formatTime(new Date()),
         workTime: util.formatTime(new Date()),
         endTime: util.formatTimeAdd(new Date()),
-      })
-      wxRequest.get(api.getTypes, e => {
-        var types = []
-        for (var i = 0; i < e.msg.length; i++) {
-          types.push(e.msg[i].sValue)
-        }
-        that.setData({
-          types: types,
-        })
       })
     } catch (e) {
       console.log(e)
@@ -96,19 +111,19 @@ Page({
     })
   },
   //输入框事件实现双向绑定
-  countInputChange:function(e){
-    var count=e.detail.value
+  countInputChange: function(e) {
+    var count = e.detail.value
     this.setData({
-      count:count
+      count: count
     })
   },
-  salaryInputChange: function (e) {
+  salaryInputChange: function(e) {
     var salary = e.detail.value
     this.setData({
       salary: salary
     })
   },
-  descInputChange: function (e) {
+  descInputChange: function(e) {
     var desc = e.detail.detail.value
     this.setData({
       desc: desc
@@ -123,7 +138,7 @@ Page({
     wxRequest.post(api.publicPosition, {
       "type": data.types[data.typeIndex],
       "time": new Date(data.workTime).getTime(),
-      "salary":  data.salary,
+      "salary": data.salary,
       "count": data.count,
       "positionDesc": data.desc,
       "videoSrc": ossSrc,
@@ -166,12 +181,12 @@ Page({
   formSubmit: function(e) {
     var ossSrc = ''
     var data = this.data
-    var val=data.value
+    var val = data.value
     var that = this
     //数据校验
     if (that.tip(!data.count, '请输入招工人数'))
-        return
-    if (that.tip(data.isByTiem && ! data.salary, '请输入大概工资'))
+      return
+    if (that.tip(data.isByTiem && !data.salary, '请输入大概工资'))
       return
     if (!data.isByTiem) {
       data.salary = -1;

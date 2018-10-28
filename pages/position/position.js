@@ -17,14 +17,13 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
-  },
-  editTap: function (e) {
+  onLoad: function(options) {},
+  editTap: function(e) {
     wx.navigateTo({
       url: `/pages/positionInfo/positionInfo?id=${e.target.id}`,
     })
   },
-  refresh: function (hidden) {
+  refresh: function(hidden) {
     if (!hidden)
       wx.showLoading({
         title: '正在加载数据',
@@ -41,10 +40,12 @@ Page({
         //返回状态信息状态过滤
         for (var i = 0; i < positions.length; i++) {
           //倒计时处理
-          if (new Date().getTime() - positions[i].createTime > 120000)
-            positions[i].targetTime = positions[i].createTime + 43200000;
-          else
-            positions[i].targetTime = positions[i].createTime + 120000;
+          if (new Date().getTime() - positions[i].createTime > 3000)
+            positions[i].targetTime = positions[i].createTime + 10000; //已过两分钟
+          else {
+            positions[i].targetTime = positions[i].createTime + 3000;
+            positions[i].targetTime2 = positions[i].createTime + 10000;
+          }
           if (positions[i].status == 1) {
             positions[i].status = '正常'
           } else if (positions[i].status == 2) {
@@ -63,29 +64,32 @@ Page({
       }
     });
   },
-  myLinsterner: function (e) {
+  myLinsterner: function(e) {
+    //43200000
     var index = e.target.dataset.index;
     var positions = this.data.positions;
-    if (new Date().getTime() - positions[index].createTime > 1200000)
-      positions[index].status = '已结束'
-    else
-      wx.reLaunch({
-        url: '/pages/position/position',
+    if (new Date().getTime() - positions[index].createTime > 10000)
+      //  positions[index].targetTime = positions[index].createTime + 10000
+      /*if (new Date().getTime() - positions[index].createTime > 30000)
+        positions[index].status = '已结束'
+      else
+        wx.reLaunch({
+          url: '/pages/position/position',
+        })*/
+      this.setData({
+        positions: positions
       })
-    this.setData({
-      positions: positions
-    })
   },
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
+  onShow: function() {
     page = 1
     this.data.positions = []
     this.refresh();
   },
 
-  deleteTap: function (e) {
+  deleteTap: function(e) {
     var that = this
     var id = e.currentTarget.id
     //删除
@@ -122,7 +126,7 @@ Page({
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
+  onPullDownRefresh: function() {
     page = 1
     this.data.positions = []
     this.refresh(true)
@@ -131,7 +135,7 @@ Page({
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
+  onReachBottom: function() {
     var that = this
     if (total % size == 0 && page >= total / size) return
     if (page > total / size) return

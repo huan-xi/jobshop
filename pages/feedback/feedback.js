@@ -66,6 +66,7 @@ Page({
       wx.showModal({
         title: '提示',
         content: '没有客服信息',
+        showCancel:false
       })
       else{
         wx.makePhoneCall({
