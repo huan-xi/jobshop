@@ -52,5 +52,7 @@ module.exports={
   //获取客服信息
   getServiceInfo: config.getDomain + "/public/getServiceInfo",
   //get notice
-  getNotice: config.getDomain +"/public/getVenderNotice"
+  getNotice: config.getDomain +"/public/getVenderNotice",
+  //获取时间
+  getTime: config.getDomain + "/public/getTime"
 }

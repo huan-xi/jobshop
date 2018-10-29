@@ -1,18 +1,19 @@
 <view class='position-list'>
   <view wx:for="{{positions}}" wx:key="key" wx:for-index="index" wx:for-item="item" class='jobBox' id="{{item.positionId}}">
-    <i-count-down
+    <!--<i-count-down
             data-index="{{index}}"
             class='count-down'
-            target="{{item.targetTime}}"
+            target="{{item.target}}"
+            target2="{{item.target2}}"
             show-day="{{false}}"
             countdown-class="big"
             format="{{myFormat}}"
             bindcallback="myLinsterner"
             clear-timer="{{clearTimer}}"
             bindtap='editTap' 
-            target2="{{item.targetTime2}}"
+            cTime='{{cTime}}'
             id='{{item.positionId}}'
-    ></i-count-down>
+    ></i-count-down>-->
     <view>
       <text class='title'>{{item.type}}</text>
       <image class='editImage' id='{{item.positionId}}' bindtap='editTap' src='/images/edite.png'></image>

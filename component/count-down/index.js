@@ -1,30 +1,37 @@
-var isFinish = false
-var isTow = false
+var api = require('../../utils/api.js');
+var wxRequest = require('../../utils/wxRequest.js')
+/*
+直接倒计时
+*/
 Component({
   properties: {
     target: Number,
-    target2: Number,
+
     showDay: Boolean,
     callback: String,
     format: Array,
-    clearTimer: Boolean
+    clearTimer: Boolean,
+    cTime: Number
   },
   externalClasses: ['countdown-class'],
   data: {
     time: '',
     resultFormat: [],
-    changeFormat: false
+    changeFormat: false,
+    isFinish: false,
+    isTow:false
   },
   ready() {
-    this.getFormat();
+    wxRequest.get(api.getTime, e => {
+      this.data.cTime = e
+      this.getFormat();
+    })
   },
   methods: {
     getFormat() {
       const data = this.data;
       const len = data.format.length;
-
       if (!data.showDay) data.resultFormat.push('');
-
       if (len >= 3) {
         for (let i = 0; i < len; i++) {
           if (data.resultFormat.length >= 4) break;
@@ -32,14 +39,11 @@ Component({
             data.resultFormat.push(data.format[i].toString());
           }
         }
-
         if (data.resultFormat.length >= 4) data.changeFormat = true;
       }
-
       this.getLastTime();
     },
     init() {
-      console.log("test")
       const self = this;
       setTimeout(function() {
         self.getLastTime.call(self);
@@ -47,12 +51,12 @@ Component({
     },
     getLastTime() {
       const data = this.data;
-      const gapTime = Math.ceil((data.target - new Date().getTime()) / 1000);
+      data.cTime += 1000
+      const gapTime = Math.ceil((data.target - data.cTime) / 1000);
       let result = '';
       let time = '00:00:00';
       let day = '00';
       const format = data.resultFormat;
-
       if (gapTime > 0) {
         day = this.formatNum(parseInt(gapTime / 86400));
         let lastTime = gapTime % 86400;
@@ -60,12 +64,11 @@ Component({
         lastTime = lastTime % 3600;
         const minute = this.formatNum(parseInt(lastTime / 60));
         const second = this.formatNum(lastTime % 60);
-
         if (data.changeFormat) time = `${hour}${format[1]}${minute}${format[2]}${second}${format[3]}`;
         else time = `${hour}:${minute}:${second}`;
-
         if (!data.clearTimer) this.init.call(this);
-      } else {
+      } else { //结束回调
+        if (!data.clearTimer) this.init.call(this);
         this.endfn();
       }
 
@@ -78,7 +81,7 @@ Component({
       } else {
         result = time;
       }
-      if (isFinish)
+      if (data.isFinish)
         result = '已结束'
       this.setData({
         time: result
@@ -89,11 +92,8 @@ Component({
     },
     endfn() {
       this.triggerEvent('callback', {});
-      if (!isTow && this.data.target2 && this.data.target2 != this.data.target) {
-        isTow = true
-        this.init()
-      } else
-        isFinish = true
+      //回调
+      this.data.isFinish = true
     }
   }
 });
