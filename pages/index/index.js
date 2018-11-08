@@ -29,6 +29,18 @@ Page({
       workTime: e.detail.value
     })
   },
+  onPullDownRefresh: function () {
+    wxRequest.get(api.getTypes, e => {
+      var types = []
+      for (var i = 0; i < e.msg.length; i++) {
+        types.push(e.msg[i].sValue)
+      }
+      wx.stopPullDownRefresh()
+      this.setData({
+        types: types,
+      })
+    })
+  },
   onLoad: function() {
     wxRequest.get(api.getTypes, e => {
       var types = []

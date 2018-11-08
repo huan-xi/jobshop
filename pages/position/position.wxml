@@ -1,5 +1,8 @@
 <view class='position-list'>
   <view wx:for="{{positions}}" wx:key="key" wx:for-index="index" wx:for-item="item" class='jobBox' id="{{item.positionId}}">
+    <view class='count-down'>
+      <text class="big">{{item.showCountDown}}</text>
+    </view>
     <!--<i-count-down
             data-index="{{index}}"
             class='count-down'
@@ -35,11 +38,11 @@
       <text class='desc'>状态</text>
       <text class='desc'>{{item.status}}</text>
     </view>
-    
+
   </view>
 </view>
 <view class="showerror" hidden='{{positions.length}}'>
   <view hidden='{{orders.length}}'>
-      <abnor type="DATA" title="没有发布职位信息,下拉试试"></abnor>
-    </view>
+    <abnor type="DATA" title="没有发布职位信息,下拉试试"></abnor>
+  </view>
 </view>

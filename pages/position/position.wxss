@@ -4,6 +4,7 @@
 .count-down{
   position: absolute;
   right:70rpx;
+  top: 70rpx;
 }
 .jobBox{
   margin-top: 20rpx;

@@ -5,21 +5,55 @@ var util = require('../../utils/util.js')
 var page = 1
 var size = 5
 var total = 0
+var cTime = 0;
 Page({
   /**
    * 页面的初始数据
    */
   data: {
     positions: [],
-    myFormat: ['时', '分', '秒'],
-    clearTimer: false,
     cTime: ''
   },
+
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-
+    wxRequest.get(api.getTime, e => {
+      cTime = e
+    })
+    this.countStart()
+  },
+  formatTime: function(t, end) {
+    var time1 = 10000 //第一次等待时间
+    var time2 = 20000 //第二次等待时间
+    var target = t + time2 - cTime;
+    if (target <= 0) {
+      //已结束
+      end();
+      return '已结束'
+    }
+    if (cTime - t <= time1)
+      var countDown = t + time1 - cTime
+    else
+      var countDown = t + time2 - cTime
+    return util.formatCountDown(countDown)
+  },
+  countStart: function() {
+    setTimeout(e => {
+      cTime += 1000
+      this.countStart()
+      //计算倒计时
+      var positions = this.data.positions
+      for (let i = 0; i < positions.length; i++) {
+        positions[i].showCountDown = this.formatTime(positions[i].createTime, e => {
+          positions[i].status = '已结束'
+        })
+      };
+      this.setData({
+        positions: positions
+      })
+    }, 1000);
   },
   editTap: function(e) {
     wx.navigateTo({
@@ -27,51 +61,41 @@ Page({
     })
   },
   refresh: function(hidden) {
-    wxRequest.get(api.getTime, e => {
-      var cTime = e
-      if (!hidden)
-        wx.showLoading({
-          title: '正在加载数据',
-        })
-      var that = this
-      var type = 0;
-      wxRequest.get(api.getPositions(page, size, type), e => {
-        wx.stopPullDownRefresh()
-        wx.hideLoading()
-        if (e.status == 1) {
-          total = e.msg.total
-          //时间状态过滤
-          var positions = e.msg.rows
-          //返回状态信息状态过滤
-          var time1 = 10000 //第一次等待时间
-          var time2 = 20000 //第二次等待时间
-          for (var i = 0; i < positions.length; i++) {
-            //倒计时处理 
-            //两分钟之前创建
-            if (cTime - positions[i].createTime < time1) {
-              positions[i].target = positions[i].createTime + time1
-              positions[i].target2 = positions[i].createTime + time2
-            } else
-              positions[i].target = positions[i].createTime + time2
-            if (positions[i].status == 1) {
-              positions[i].status = '正常'
-            } else if (positions[i].status == 2) {
-              positions[i].positions = '已完成'
-            } else if (positions[i].status == 3) {
-              positions[i].status = '已取消'
-            } else {
-              positions[i].status = '正常'
-            }
-            positions[i].time = util.formatTime(new Date(positions[i].time))
-          }
-          var positions = that.data.positions.concat(e.msg.rows)
-          this.setData({
-            positions: positions,
-            cTime:cTime
+    if (!hidden)
+      wx.showLoading({
+        title: '正在加载数据',
+      })
+    var that = this
+    var type = 0;
+    wxRequest.get(api.getPositions(page, size, type), e => {
+      wx.stopPullDownRefresh()
+      wx.hideLoading()
+      if (e.status == 1) {
+        total = e.msg.total
+        //时间状态过滤
+        var positions = e.msg.rows
+        //返回状态信息状态过滤
+        for (var i = 0; i < positions.length; i++) {
+          //倒计时处理 
+          //两分钟之前创建 countDown
+          positions[i].showCountDown = that.formatTime(positions[i].createTime, e => {
+            positions[i].status = '已结束'
           })
+          if (positions[i].status == 1) {
+            positions[i].status = '正常'
+          } else if (positions[i].status == 2) {
+            positions[i].positions = '已完成'
+          } else if (positions[i].status == 3) {
+            positions[i].status = '已取消'
+          }
+          positions[i].time = util.formatTime(new Date(positions[i].time))
         }
-      });
-    })
+        var positions = that.data.positions.concat(e.msg.rows)
+        this.setData({
+          positions: positions,
+        })
+      }
+    });
   },
   myLinsterner: function(e) { //倒计时完成回调
     //43200000

@@ -3,7 +3,6 @@
     "navigationBarTextStyle": "black",
     "enablePullDownRefresh": true,
     "usingComponents": {
-    "i-count-down": "/component/count-down/index",
     "abnor": "/component/abnor/index"
     }
 }

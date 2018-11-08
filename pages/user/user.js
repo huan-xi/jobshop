@@ -51,12 +51,14 @@ Page({
       url: '/pages/editVender/editVender',
     })
   },
-  refresh: function() {
+  refresh: function(isPull) {
+    if(!isPull)
     wx.showLoading({
       title: '正在获取信息',
     })
     wxRequest.get(api.getInfo, e => {
       wx.hideLoading()
+      if(isPull) wx.stopPullDownRefresh();
       if (e.status == 1) {
         var vender = e.msg
         wx.setStorageSync('vender', vender);
@@ -100,7 +102,7 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function() {
-
+    this.refresh(true)
   },
 
 })
