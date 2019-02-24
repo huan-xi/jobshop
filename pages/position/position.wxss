@@ -1,11 +1,6 @@
 .position-list{
   padding-bottom: 40rpx;
 }
-.count-down{
-  position: absolute;
-  right:70rpx;
-  top: 70rpx;
-}
 .jobBox{
   margin-top: 20rpx;
   padding: 20rpx;
@@ -15,28 +10,19 @@
   border: 1rpx solid #dddee1;
   border-radius: 5px;
 }
-.salary{
-  float: right;
-  margin-right: 0;
-  color: rgb(224, 135, 108);
+.jobBox p{
+  color: #464c5b;
+  font-size:28rpx;
 }
 .desc{
-  color: gray;
+  color: #9ea7b4;
   display: inline-block;
   margin-right: 20rpx;
-  font-size: 25rpx;
+  font-size: 24rpx;
 }
 .editImage{
   float: right;
   width: 50rpx;
   height: 50rpx;
   margin-right: 50rpx;
-}
-.jobBox view{
-  height: 40rpx;
-}
-.big{
-  font-size: 30rpx;
-  color: #3399FF;
-  font-weight: bold;
 }

@@ -1,0 +1,31 @@
+<view class='page'>
+  <p class='green'>为防止违规信息的出现，我们启用了人工审核，您发布的信息得如果我们审核不通过则不会在本平台展示，也请您不要发布违规信息，否则您会进入黑名单!</p>
+  <view class='title'>发帖须知：</view>
+  <view>
+    <view>
+      一、不得利用本站危害国家安全、泄露国家秘密，不得侵犯国家社会集体的和公民的合法权益，不得利用本站制作、复制和传播下列信息:
+      <view class='inline'>
+        <view class='line'> (一)煽动抗拒、破坏宪法和法律、行政法规实施的;</view>
+        <view class='line'>(二)煽动颠覆国家政权，推翻社会主义制度的; </view>
+        <view class='line'>(三)煽动分裂国家、破坏国家统一的; </view>
+        <view class='line'> (四)煽动民族仇恨、民族歧视，破坏民族团结的;</view>
+        <view class='line'>(五)捏造或者歪曲事实，散布谣言，扰乱社会秩序的;</view>
+        <view class='line'>(六)宣扬封建迷信、淫秽、色情、赌博、暴力、凶杀、恐怖、教唆犯罪的;</view>
+        <view class='line'>(七)公然侮辱他人或者捏造事实诽谤他人的，或者进行其他恶意攻击的;</view>
+        <view class='line'>(八)损害国家机关信誉的;</view>
+        <view class='line'>(九)其他违反宪法和法律行政法规的;</view>
+        <view class='line'>(十)发布黄色反动文章。</view>
+      </view>
+    </view>
+    <view>
+      二、互相尊重，对自己的言论和行为负责。
+    </view>
+    <view>
+      三、如果不遵守国家相关法律法规发布的信息，所造成的一切后果，由发布者自行承担!
+    </view>
+  </view>
+  <view class='title'>免责申明：</view>
+  <view class='declaration'>
+  本平台一切信息来源于网络公众!本平台要求信息发布者提供真实、有效、合理、合法的信息，本平台对发布的信息不承担任何责任，请各位自己甄别。
+  </view>
+</view>

@@ -16,19 +16,33 @@
     </view>
   </i-card>
 </view>
-<i-panel>
-  <i-cell-group>
-    <i-cell title="编辑信息" is-link url="/pages/editVender/editVender">
-      <i-icon type="brush" size='25' slot="icon" />
-    </i-cell>
-    <i-cell title="客服与反馈" is-link  url="/pages/feedback/feedback">
-      <i-icon type="document" size='25' slot="icon" />
-    </i-cell>
-    <i-cell title="清除缓存"  bind:click="clear">
-      <i-icon type="trash" size='25' slot="icon" />
-    </i-cell>
-    <i-cell title="退出登入" bind:click="logout">
-      <i-icon type="enterinto" size='25' slot="icon" />
-    </i-cell>
-  </i-cell-group>
-</i-panel>
+<view class="list-wrap">
+  <view class="list-item">
+    <view class='list list__body'>
+      <image class="list__image" src="../../images/122.png" mode="aspectFill"></image>
+      <view class='list__title' bindtap='toEdit'>编辑信息</view>
+      <wxc-icon class="list__desc--arrow" type="arrow-right" size="30" color="#c2c2c2" _pid="{{_pid}}"></wxc-icon>
+    </view>
+    <view class='list list__body'>
+      <image class="list__image" src="../../images/145.png" mode="aspectFill"></image>
+      <button class='list__title none-btn' open-type="contact">在线客服</button>
+    </view>
+    <view class='list list__body'>
+      <image class="list__image" src="../../images/96.png" mode="aspectFill"></image>
+      <view class='list__title' bindtap='call'>电话客服</view>
+    </view>
+    <view class='list list__body'>
+      <image class="list__image" src="../../images/1.png" mode="aspectFill"></image>
+      <button class='list__title none-btn' open-type="feedback">提交反馈</button>
+    </view>
+
+    <view class='list list__body'>
+      <image class="list__image" src="../../images/64.jpg" mode="aspectFill"></image>
+      <button class='list__title none-btn' open-type="share">分享程序</button>
+    </view>
+    <view class='list list__body'>
+      <image class="list__image" src="../../images/73.png" mode="aspectFill"></image>
+      <view class='list__title' bindtap='clear'>清除缓存</view>
+    </view>
+  </view>
+</view>

@@ -1,9 +1,0 @@
-.group input,.group .chooseAddr,.addr{
-  margin-left: 50rpx;
-}
-.addr{
-  color: gray;
-}
-.sava{
-  margin-top: 350rpx;
-}

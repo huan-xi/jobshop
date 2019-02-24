@@ -1,56 +1,33 @@
-var api = require('../../utils/api.js');
-var wxRequest = require('../../utils/wxRequest.js')
-var auth = require('../../utils/auth.js');
-var util = require('../../utils/util.js');
+const api = require('../../utils/api.js');
+const wxRequest = require('../../utils/wxRequest.js')
+const auth = require('../../utils/auth.js');
+const util = require('../../utils/util.js');
+const qiniuUploader = require("../../utils/qiniuUploader")
+let ossImages = []
 Page({
   data: {
-    types: ['正在加载数据...'],
-    typeIndex: 0,
-    workTime: '',
-    startTime: '',
-    endTime: '',
-    count: 0,
     desc: '',
     notice: '',
     loop: false,
-    salary: '',
-    workType: ['计时', '计件'],
-    workTypeIndex: 0,
-    salatyType: ['1小时', '2小时', '3小时', '4小时', '5小时', '6小时', '7小时', '8小时', '9小时', '10小时', '11小时', '12小时'],
-    salatyTypeIndex: 0,
-    src: '',
-    isByTiem: true, //是否是计时模式
-    address: {
-      name: '选择地点'
-    }
+    images: [],
+    checked:false,
   },
-  bindTimePickerChange: function(e) {
-    this.setData({
-      workTime: e.detail.value
-    })
-  },
-  onPullDownRefresh: function () {
-    wxRequest.get(api.getTypes, e => {
-      var types = []
-      for (var i = 0; i < e.msg.length; i++) {
-        types.push(e.msg[i].sValue)
+
+  onPullDownRefresh: function() {
+    wxRequest.get(api.getNotice, e => {
+      if (e.status == 1) {
+        var loop = false
+        if (e.msg.length > 20)
+          loop = true
+        this.setData({
+          notice: e.msg,
+          loop,
+        })
+        wx.stopPullDownRefresh()
       }
-      wx.stopPullDownRefresh()
-      this.setData({
-        types: types,
-      })
     })
   },
   onLoad: function() {
-    wxRequest.get(api.getTypes, e => {
-      var types = []
-      for (var i = 0; i < e.msg.length; i++) {
-        types.push(e.msg[i].sValue)
-      }
-      this.setData({
-        types: types,
-      })
-    })
     wxRequest.get(api.getNotice, e => {
       if (e.status == 1) {
         var loop = false
@@ -63,104 +40,104 @@ Page({
       }
     })
   },
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function() {
-    //页面数据显示
-    try {
-      var that = this
-      that.setData({
-        startTime: util.formatTime(new Date()),
-        workTime: util.formatTime(new Date()),
-        endTime: util.formatTimeAdd(new Date()),
-      })
-    } catch (e) {
-      console.log(e)
-      wx.showModal({
-        title: '警告',
-        content: '页面发生错误，请刷新后重试',
-      })
-    }
+  toReader(){
+    wx.navigateTo({
+      url: '/pages/reader/reader',
+    })
   },
-  //选择视频
-  chooseVideo: function() {
+  readerChange(val){
+    let checked= val.detail.current
+    this.setData({
+      checked
+    })
+  },
+  //选择图片
+  choosePic: function() {
     var that = this
-    wx.chooseVideo({
-      maxDuration: 60,
+    wx.chooseImage({
+      sizeType:'compressed',
+      count:1,
       success: function(res) {
-        if (res.size / res.duration > 300 * 1024) {
-          wx.showModal({
-            title: '提示',
-            content: '您的机型暂不支持拍照直接压缩，请先拍完后再从相册中选择上传！',
-            showCancel: false
-          })
-          return;
-        }
+        let images = that.data.images
+        images.push(res.tempFilePaths[0])
         that.setData({
-          src: res.tempFilePath,
+          images,
         })
+      },
+      fail:function(e){
+          console.log(e)
       }
     })
   },
-  bindPickerChange: function(e) {
-    var isByTiem;
-    if (e.detail.value != 0) isByTiem = false
-    else isByTiem = true
-    this.setData({
-      workTypeIndex: e.detail.value,
-      isByTiem: isByTiem,
-    })
-  },
-  bindPickerUnitChange: function(e) {
-    this.setData({
-      salatyTypeIndex: e.detail.value
-    })
-  },
-  bindTypeChange: function(e) {
-    this.setData({
-      typeIndex: e.detail.value
-    })
-  },
-  //输入框事件实现双向绑定
-  countInputChange: function(e) {
-    var count = e.detail.value
-    this.setData({
-      count: count
-    })
-  },
-  salaryInputChange: function(e) {
-    var salary = e.detail.value
-    this.setData({
-      salary: salary
+  deletePic(e) {
+    let index = e.currentTarget.id
+    wx.showModal({
+      title: '提示',
+      content: '确定要删除该张图片吗',
+      success: res => {
+        if (res.confirm) {
+          let images = this.data.images
+          images.splice(index, 1)
+          this.setData({
+            images,
+          })
+        }
+      }
     })
   },
   descInputChange: function(e) {
-    var desc = e.detail.detail.value
+    var desc = e.detail.value
     this.setData({
       desc: desc
     })
   },
+  //上传文件
+  //传入地址数组和当前上传个数
+  uploadFile(src, i) {
+    if (i >= 0&&ossImages.length<src.length) {
+      //上传图片到七牛云
+      qiniuUploader.upload(src[i], res => {
+        ossImages.push(res.imageURL)
+        this.uploadFile(src, i - 1)
+      }, (error) => {
+        wx.hideLoading()
+        throw new Error("上传图片失败");
+        console.log('error: ' + error);
+      }, {
+        region: 'SCN', // ECN, SCN, NCN, NA, ASG，分别对应七牛的：华东，华南，华北，北美，新加坡 5 个区域
+        uptokenURL: api.uptoken,
+      })
+    } else {
+      //全部上传完成
+      wx.hideLoading()
+      //上传成功
+      wx.showToast({
+        title: '上传成功',
+      })
+      this.submit()
+    }
+  },
   //提交信息
-  submit: function(data, val, ossSrc) {
+  submit: function() {
     var that = this
     wx.showLoading({
       title: '正在发布职位',
     })
     wxRequest.post(api.publicPosition, {
-      "type": data.types[data.typeIndex],
-      "time": new Date(data.workTime).getTime(),
-      "salary": data.salary,
-      "count": data.count,
-      "positionDesc": data.desc,
-      "videoSrc": ossSrc,
-      "salaryType": "元/" + data.salatyType[data.salatyTypeIndex],
+      desc: that.data.desc,
+      ossImages,
     }, function(e) {
       wx.hideLoading()
       if (e.status == 1) {
+        //清空数据
+        ossImages=[]
+        that.setData({
+          desc:'',
+          images:[]
+        })
         wx.showModal({
           title: '提示',
-          content: '发布成功，你可以在两分钟之内做修改，两分钟过后将展示12小时',
+          content: '发布成功，你可以在已经发布页面查看',
           confirmText: "查看发布",
           success: e => {
             if (e.confirm) {
@@ -171,11 +148,12 @@ Page({
           }
         })
       } else {
+        /*
         wx.showModal({
           title: '提示',
           content: e.msg,
           showCancel: false
-        })
+        })*/
       }
     })
   },
@@ -191,42 +169,28 @@ Page({
     }
   },
   formSubmit: function(e) {
-    var ossSrc = ''
-    var data = this.data
-    var val = data.value
-    var that = this
-    //数据校验
-    if (that.tip(!data.count, '请输入招工人数'))
-      return
-    if (that.tip(data.isByTiem && !data.salary, '请输入大概工资'))
-      return
-    if (!data.isByTiem) {
-      data.salary = -1;
-    }
-    if (that.tip(!data.desc, '请输入详细描述'))
-      return
+    let data = this.data
+    //是否阅读
+    if (this.tip(!data.checked, '请阅读发布须知')) return;
     //是否填信息
-    if (data.src && data.src.length > 0) {
-      //上传文件再提交
+    if (this.tip(!data.desc, '请输入详细描述')) return;
+    //上传图片
+    if (data.images.length > 0) {
       wx.showLoading({
-        title: '正在上传文件',
+        title: '正在上传图片',
       })
-      wxRequest.uploadFile(api.uploadVideo, data.src, 'video', function(e) {
-        if (e.status == 1) {
-          //成功
-          wx.hideLoading()
-          ossSrc = e.msg
-          that.submit(data, val, ossSrc)
-        } else {
-          wx.showModal({
-            title: '提示',
-            content: '上传视频失败',
-          })
-          return
-        }
-      });
+      try {
+        this.uploadFile(data.images, data.images.length - 1)
+      } catch (e) {
+        console.log(e);
+        wx.showModal({
+          title: '错误',
+          content: e.message,
+          showCancel: false
+        })
+      }
       return
     }
-    that.submit(data, val, '')
+    this.submit()
   }
 })

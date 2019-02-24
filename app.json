@@ -1,12 +1,11 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/order/order",
     "pages/user/user",
-    "pages/editVender/editVender",
+    "pages/update/index",
     "pages/position/position",
     "pages/positionInfo/positionInfo",
-    "pages/feedback/feedback"
+    "pages/reader/reader"
   ],
   "window": {
     "navigationBarBackgroundColor": "#1296db"
@@ -25,12 +24,6 @@
         "text": "已经发布",
         "iconPath": "images/brush.png",
         "selectedIconPath": "images/brush-d.png"
-      },
-      {
-        "pagePath": "pages/order/order",
-        "text": "申请订单",
-        "iconPath": "images/oders.png",
-        "selectedIconPath": "images/orders-d.png"
       },
       {
         "pagePath": "pages/user/user",

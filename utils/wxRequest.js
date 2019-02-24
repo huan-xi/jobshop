@@ -1,30 +1,12 @@
+const auth = require('./auth.js')
 function dofilter(e, s) {
   //POST拦截
-  if (e.data.status == 4003) {
+  //Token 过期
+  if (e.data.status == 40001) {
     wx.hideLoading()
-    wx.showModal({
-      title: '提示',
-      content: '你还未登入是否自动登入',
-      confirmText: '去登入',
-      success: function (e) {
-        if (e.confirm) {
-          //登入
-          getApp().globalData.token=''
-          wx.switchTab({
-            url: '/pages/user/user',
-          })
-        }
-      }
-    })
-    return
-  }
-  if (e.data.status == 5000) {
-    wx.hideLoading()
-    wx.showModal({
-      title: '提示',
-      content: e.data.msg,
-      showCancel: false
-    })
+    getApp().globalData.token = ''
+    wx.clearStorageSync()
+    auth.login(s(e.data))
     return
   }
   s(e.data);

@@ -2,7 +2,6 @@ var api = require('../../utils/api.js');
 var wxRequest = require('../../utils/wxRequest.js')
 var auth = require('../../utils/auth.js');
 Page({
-
   /**
    * 页面的初始数据
    */
@@ -35,20 +34,9 @@ Page({
     getApp().globalData.token=''
     wx.clearStorageSync()
   },
-  logout: function(e) {
-    var that=this
-    wx.showModal({
-      title: '提示',
-      content: '确定要退出吗？',
-      success: e => {
-        if (e.confirm)
-          that.exit()
-      }
-    })
-  },
   toEdit: function(e) {
     wx.navigateTo({
-      url: '/pages/editVender/editVender',
+      url: '/pages/update/index',
     })
   },
   refresh: function(isPull) {
@@ -72,8 +60,6 @@ Page({
           content: '获取数据失败，请重新登入再试',
           showCancel: false
         })
-        wx.setStorageSync("Token", "")
-        getApp().globalData.token = ''
       }
     })
   },
@@ -96,6 +82,21 @@ Page({
           that.refresh()
         }
       },
+    })
+  },
+  call() {
+    wxRequest.get(api.getPhone, res => {
+      if (res.status == 1) {
+        wx.makePhoneCall({
+          phoneNumber: res.msg,
+        })
+      } else {
+        wx.showModal({
+          title: '提示',
+          content: '没有客服信息',
+          showCancel: false
+        })
+      }
     })
   },
   /**

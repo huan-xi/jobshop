@@ -4,3 +4,56 @@
 .card-demo open-data {
   border-radius: 50%;
 }
+.list-wrap {
+    width: 100%;
+    background: #f8f8f9;
+    padding-bottom: 30rpx;
+    padding-top: 30rpx;
+  }
+  .list-item {
+    background: #fff;
+    margin-bottom: 30rpx;
+  }
+  .list-item:last-child {
+    margin: 0;
+  }
+  .item {
+    flex: 1;
+  }
+  .list__body {
+    display: flex;
+    align-items: center;
+    min-height: 90rpx;
+    line-height: 1.4;
+    padding: 20rpx 30rpx 20rpx 0;
+    margin-left: 30rpx;
+    box-sizing: border-box;
+    border-bottom: 1rpx solid #ececec;
+    font-size: 32rpx;
+    color: #333
+}
+.list__image {
+    width: 64rpx;
+    height: 64rpx;
+    margin-right: 30rpx
+}
+.list__desc--arrow {
+    margin-left: 8rpx
+}
+.list__icon {
+    margin-right: 30rpx
+}
+.list__title {
+    flex: 1
+}
+.none-btn{
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  font-size: 32rpx;
+  background-color: white;
+  line-height: inherit
+}
+.none-btn::after{
+  border: none;
+}

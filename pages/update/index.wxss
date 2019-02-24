@@ -1,0 +1,17 @@
+.sava{
+  margin-top: 350rpx;
+}
+.card{
+  padding:0 40rpx;
+  background: white;
+  margin: 20rpx 15rpx;
+  border-radius: 30rpx;
+}
+.address{
+position: relative
+}
+.address-icon{
+  position: absolute;
+  top:25rpx;
+  right:20rpx;
+}

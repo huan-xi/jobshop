@@ -1,0 +1,21 @@
+.page {
+  font-size: 24rpx;
+  padding: 10rpx 30rpx;
+  line-height: 45rpx;
+}
+
+.green {
+  color: limegreen;
+}
+
+.title {
+  color: red;
+}
+
+.inline {
+  padding-left: 48rpx;
+}
+
+.declaration {
+  font-weight: bold ;
+}

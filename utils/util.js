@@ -38,9 +38,14 @@ const formatNumber = n => {
   n = n.toString()
   return n[1] ? n : '0' + n
 }
+//上传文件
+const updateFile =function(){
+  
+}
 
 module.exports = {
   formatTime: formatTime,
   formatTimeAdd: formatTimeAdd,
-  formatCountDown: formatCountDown
+  formatCountDown: formatCountDown,
+  updateFile
 }

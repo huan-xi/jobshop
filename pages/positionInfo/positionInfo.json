@@ -8,6 +8,9 @@
     "i-panel": "/component/panel/index",
     "i-row": "/component/row/index",
     "i-button": "/component/button/index",
-    "i-col": "/component/col/index"
+    "i-col": "/component/col/index",
+    "wxc-icon": "/component/wxc-icon/dist/index",
+    "wxc-cc": "/component/wxc-cc/dist/index",
+    "wxc-flex": "/component/wxc-flex/dist/index"
   }
 }

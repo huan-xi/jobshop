@@ -1,3 +1,4 @@
+<!-- 通告 -->
 <view wx:if='{{notice}}'>
   <view wx:if="{{loop}}">
     <i-notice-bar icon="systemprompt" closable loop>
@@ -10,58 +11,42 @@
     </i-notice-bar>
   </view>
 </view>
-<i-panel title="填写招工信息 (发布消息后两分钟之内可修改)">
-  <i-cell-group>
-    <i-cell title="选择招工工种" is-link>
-      <picker slot="footer" bindchange="bindTypeChange" range="{{types}}" value="{{typeIndex}}">
-        <view class="picker">
-          {{types[typeIndex]}}
-        </view>
-      </picker>
-    </i-cell>
-    <i-cell title="填写招工人数">
-      <input slot="footer" autofocus type="number" bindinput='countInputChange' placeholder='请输入招工人数'></input>
-    </i-cell>
-    <i-cell title="选择工作时间" is-link label="选择今天或者明天">
-      <picker slot="footer" start="{{startTime}}" end="{{endTime}}" bindchange="bindTimePickerChange" mode="date" value="{{workTime}}">
-        <view class="picker">
-          {{workTime}}
-        </view>
-      </picker>
-    </i-cell>
-    <i-cell title="选择计价方式" is-link label="选择记件请在工种描述中填写">
-      <picker slot="footer" bindchange="bindPickerChange" range="{{workType}}" value="{{workTypeIndex}}">
-        <view>
-          {{workType[workTypeIndex]}}
-        </view>
-      </picker>
-    </i-cell>
-    <i-cell title="请填写工资" wx:if="{{isByTiem}}">
-      <input slot="footer" type="digit" bindinput='salaryInputChange' placeholder='请填写工资'></input>
-    </i-cell>
-    <i-cell title="选择工种时长" is-link label="最长12小时" wx:if="{{isByTiem}}">
-      <picker slot="footer" bindchange="bindPickerUnitChange" range="{{salatyType}}" value="{{salatyTypeIndex}}">
-        <view class="picker">
-          {{salatyType[salatyTypeIndex]}}
-        </view>
-      </picker>
-    </i-cell>
-    <i-panel>
-      <i-input auto-height bindchange="descInputChange" type="textarea" title="工种详细描述" placeholder="工种详细描述(最多100字)" maxlength="100" />
-    </i-panel>
-  </i-cell-group>
-  <i-panel title="添加视频(可选)">
-    <view class="uploadVideo">
-      <block wx:if="{{src === ''}}">
-        <view class="" bindtap="chooseVideo">
-          <image src='../../images/idCard.png' class='add'></image>
-        </view>
-      </block>
-      <block wx:if="{{src != ''}}">
-        <video src="{{src}}" class="video"></video>
-        <i-button bind:click="chooseVideo" type="ghost">重新选择</i-button>
-      </block>
-    </view>
+<i-panel title="请填写招工信息">
+  <i-panel>
+    <textarea class='info' value='{{desc}}' bindinput='descInputChange' placeholder-class='placeholder-class' placeholder="请填写工作详细描述（最多560个字）">
+    </textarea>
   </i-panel>
+  <view class='title'>
+    <text>添加图片</text>
+    <text class='assist'>(部分机型直接拍照可能会造成小程序闪退，请拍照后从相片中选择)</text>
+  </view>
+  <view class="upload-pic">
+    <wxc-flex wrap="wrap">
+      <view wx:for="{{images}}" wx:key="key" wx:for-index="index" wx:for-item="item" class='select-pic' style="display: inline-block; width: 156rpx;margin-right: 10rpx;">
+        <image src='{{item}}' id="{{index}}"></image>
+        <view class='delete-icon' bindtap='deletePic'>
+          <wxc-icon size="30" color="#FBFDFF" type="close"></wxc-icon>
+        </view>
+      </view>
+
+      <view style="display: inline-block; width: 156rpx;">
+        <view bindtap='choosePic' class='upload'>
+          <view style="width: 156rpx; height: 156rpx; line-height: 156rpx;">
+            <wxc-cc>
+              <wxc-icon size="40" type="camera"></wxc-icon>
+            </wxc-cc>
+          </view>
+        </view>
+      </view>
+    </wxc-flex>
+  </view>
+  <wxc-flex class="contract">
+    <wxc-cc>
+      <i-radio style="width: 85rpx; " checked="{{checked}}" color="#1296db" bindchange="readerChange">
+      </i-radio>
+      <text>我已将阅读并同意</text>
+      <text bindtap='toReader' class='reader'>《发布须知》</text>
+    </wxc-cc>
+  </wxc-flex>
   <i-button bind:click="formSubmit" type="primary" shape="circle">确定发布</i-button>
 </i-panel>

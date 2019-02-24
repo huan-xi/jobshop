@@ -1,0 +1,48 @@
+.info{
+  width: 100%;
+  height: 400rpx;
+  padding: 0 30rpx;
+}
+.placeholder-classP{
+  font-size: 28rpx;
+}
+.upload{
+background: #fff;
+border: 1px dashed #dcdee2;
+border-radius: 4px;
+text-align: center;
+cursor: pointer;
+position: relative;
+overflow: hidden;
+transition: border-color .2s ease;
+}
+.upload-pic{
+  padding: 20rpx;
+}
+.select-pic image{
+  width: 156rpx;
+  height: 156rpx;
+}
+.select-pic{
+  position: relative;
+}
+.delete-icon{
+  position: absolute;
+  top:0;
+  right:10rpx;
+}
+.title{
+  font-size: 28rpx;
+  margin: 20rpx;
+}
+.title .assist{
+  font-size: 24rpx;
+  color: #999999
+}
+.contract text{
+  color: #999999;
+   font-size: 28rpx;
+}
+.contract .reader{
+  color: #1296db
+}

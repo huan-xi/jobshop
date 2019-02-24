@@ -1,180 +1,111 @@
-var api = require('../../utils/api.js');
-var wxRequest = require('../../utils/wxRequest.js')
-var auth = require('../../utils/auth.js');
-var util = require('../../utils/util.js');
-var id;
+const api = require('../../utils/api.js');
+const wxRequest = require('../../utils/wxRequest.js')
+const auth = require('../../utils/auth.js');
+const util = require('../../utils/util.js');
+const qiniuUploader = require("../../utils/qiniuUploader")
+let id;
 Page({
   data: {
-    types: ['正在加载数据...'],
-    typeIndex: 0,
-    workTime: '',
-    startTime: '',
-    endTime: '',
-    workType: ['计时', '计件'],
-    workTypeIndex: 0,
-    salatyType: ['1小时', '2小时', '3小时', '4小时', '5小时', '6小时', '7小时', '8小时', '9小时', '10小时', '11小时', '12小时'],
-    salatyTypeIndex: 0,
-    src: '',
-    isByTiem: true, //是否是计时模式
-    count: 0,
     desc: '',
-    salary: 0,
-    address: {
-      name: '选择地点'
-    }
+    images: [],
   },
-  bindTimePickerChange: function(e) {
-    this.setData({
-      workTime: e.detail.value
+  refresh() {
+    wxRequest.get(api.getJob(id), e => {
+      let images = e.msg.images
+      this.setData({
+        images,
+        desc: e.msg.job_desc
+      });
     })
   },
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onLoad: function(option) {
-    var that = this
+  onLoad: function (option) {
     id = option.id
-    wxRequest.get(api.getPosition(option.id), e => {
-      var data = e.msg
-      //数据回写
-      try {
-        that.setData({
-          startTime: util.formatTime(new Date()),
-          workTime: util.formatTime(new Date(data.createTime)),
-          endTime: util.formatTimeAdd(new Date()),
-        })
-        //工种回显示
-        wxRequest.get(api.getTypes, e => {
-          var types = []
-          var typeIndex = 0
-          for (var i = 0; i < e.msg.length; i++) {
-            types.push(e.msg[i].sValue)
-            if (data.type == e.msg[i].sValue)
-              typeIndex = i
-          }
-          //视频回写
-          var src=''
-          if (data.videoSrc)
-            src=api.getImageSrc() + data.videoSrc 
-          //计时方式回写
-          var isByTiem = true
-          var workTypeIndex = 0
-          if (data.salary == -1) {
-            isByTiem = false
-            workTypeIndex = 1
-            data.salary = ''
-          }
-          var salatyTypeIndex = 0
-          //单位回写
-          for (var i = 0; i < that.data.salatyType.length; i++) {
-            if (data.salaryType == that.data.salatyType[i]) {
-              salatyTypeIndex = i
-              break
-            }
-          }
-          that.setData({
-            types: types,
-            src: src,
-            salary: data.salary,
-            count: data.count,
-            desc: data.positionDesc,
-            typeIndex: typeIndex,
-            isByTiem: isByTiem,
-            salatyTypeIndex: salatyTypeIndex,
-            workTypeIndex: workTypeIndex,
-          })
-        })
-      } catch (e) {
-        wx.showModal({
-          title: '警告',
-          content: '页面发生错误，请刷新后重试',
-        })
-      }
-    });
+    this.refresh()
   },
-  //选择视频
-  chooseVideo: function() {
+  //选择图片
+  choosePic: function () {
     var that = this
-    wx.chooseVideo({
-      maxDuration: 60,
-      success: function(res) {
-        if (res.size / res.duration > 300 * 1024) {
-          wx.showModal({
-            title: '提示',
-            content: '您的机型暂不支持拍照直接压缩，请先拍完后再从相册中选择上传！',
-            showCancel: false
-          })
-          return;
-        }
-        that.setData({
-          src: res.tempFilePath,
-        })
+    wx.chooseImage({
+      success: function (res) {
+        //上传 修改
+        that.uploadFile(res.tempFilePaths[0]);
+      },
+    })
+  },
+  deletePic(e) {
+    let index = e.currentTarget.id
+    wx.showModal({
+      title: '提示',
+      content: '确定要删除该张图片吗',
+      success: res => {
+        wxRequest.get(api.deleteImage(index), e => {
+          if (e.status == 1) {
+            wx.showToast({
+              title: e.msg,
+            })
+            this.refresh()
+          }
+        });
       }
-    })
-  },
-  bindPickerChange: function(e) {
-    var isByTiem;
-    if (e.detail.value != 0) isByTiem = false
-    else isByTiem = true
-    this.setData({
-      workTypeIndex: e.detail.value,
-      isByTiem: isByTiem,
-    })
-  },
-  bindPickerUnitChange: function(e) {
-    this.setData({
-      salatyTypeIndex: e.detail.value
-    })
-  },
-  bindTypeChange: function(e) {
-    this.setData({
-      typeIndex: e.detail.value
-    })
-  },
-  //输入框事件实现双向绑定
-  countInputChange: function (e) {
-    var count = e.detail.value
-    this.setData({
-      count: count
-    })
-  },
-  salaryInputChange: function (e) {
-    var salary = e.detail.value
-    this.setData({
-      salary: salary
     })
   },
   descInputChange: function (e) {
-    var desc = e.detail.detail.value
+    var desc = e.detail.value
     this.setData({
       desc: desc
     })
   },
+  //上传文件
+  uploadFile(src) {
+    wx.showLoading({
+      title: '正在上传图片'
+    })
+    //上传图片到七牛云
+    qiniuUploader.upload(src, res => {
+      wxRequest.post(api.addImage, {
+        job_id: id,
+        src: res.imageURL
+      }, e => {
+        if (e.status == 1) {
+          wx.showToast({
+            title: '上传图片成功',
+          })
+          this.refresh()
+        }
+      });
+    }, (error) => {
+      wx.hideLoading()
+      throw new Error("上传图片失败");
+      console.log('error: ' + error);
+    }, {
+        region: 'SCN', // ECN, SCN, NCN, NA, ASG，分别对应七牛的：华东，华南，华北，北美，新加坡 5 个区域
+        uptokenURL: api.uptoken,
+      })
+  },
   //提交信息
-  submit: function (data, val, ossSrc) {
+  submit: function () {
     var that = this
     wx.showLoading({
-      title: '正在修改职位',
+      title: '正在修改工作信息',
     })
-    wxRequest.post(api.editPosition, {
-      "positionId": id,
-      "type": data.types[data.typeIndex],
-      "time": new Date(data.workTime).getTime(),
-      "salary": data.salary,
-      "count": data.count,
-      "positionDesc": data.desc,
-      "videoSrc": ossSrc,
-      "salaryType": "元/" + data.salatyType[data.salatyTypeIndex],
+    wxRequest.post(api.uodateJob, {
+      job_id:id,
+      job_desc: that.data.desc,
     }, function (e) {
       wx.hideLoading()
       if (e.status == 1) {
-        wx.showToast({
-          title: '修改成功',
+        wx.showModal({
+          title: '提示',
+          content: '修改成功',
+          showCancel: false,
+          success: e => {
+            if (e.confirm) {
+              wx.switchTab({
+                url: '/pages/position/position',
+              })
+            }
+          }
         })
-        wx.switchTab({
-          url: '/pages/position/position',
-        })
-       
       } else {
         wx.showModal({
           title: '提示',
@@ -196,42 +127,10 @@ Page({
     }
   },
   formSubmit: function (e) {
-    var ossSrc = ''
-    var data = this.data
-    var val = data.value
-    var that = this
-    //数据校验
-    if (that.tip(!data.count, '请输入招工人数'))
-      return
-    if (that.tip(data.isByTiem && !data.salary, '请输入大概工资'))
-      return
-    if (!data.isByTiem) {
-      data.salary = -1;
-    }
-    if (that.tip(!data.desc, '请输入详细描述'))
-      return
+    let data = this.data
     //是否填信息
-    if (data.src && data.src.length > 0 && data.src.search("//tmp") != -1) {
-      //上传文件再提交
-      wx.showLoading({
-        title: '正在上传文件',
-      })
-      wxRequest.uploadFile(api.uploadVideo, data.src, 'video', function (e) {
-        if (e.status == 1) {
-          //成功
-          wx.hideLoading()
-          ossSrc = e.msg
-          that.submit(data, val, ossSrc)
-        } else {
-          wx.showModal({
-            title: '提示',
-            content: '上传视频失败',
-          })
-          return
-        }
-      });
-      return
-    }
-    that.submit(data, val, '')
+    if (this.tip(!data.desc, '请输入详细描述')) return;
+    //上传图片
+    this.submit()
   }
 })

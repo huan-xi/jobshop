@@ -3,6 +3,17 @@
     "navigationBarTextStyle": "black",
     "enablePullDownRefresh": true,
     "usingComponents": {
-    "abnor": "/component/abnor/index"
+      "abnor": "/component/abnor/index",
+      "i-tabs": "/component/tabs/index",
+      "i-load-more": "/component/load-more/index",
+      "i-tab": "/component/tab/index",
+      "i-cell-group": "/component/cell-group/index",
+      "i-cell": "/component/cell/index",
+      "i-panel": "/component/panel/index",
+      "i-button": "/component/button/index",
+      "i-notice-bar": "/component/notice-bar/index",
+      "wxc-icon": "/component/wxc-icon/dist/index",
+      "wxc-cc": "/component/wxc-cc/dist/index",
+      "wxc-flex": "/component/wxc-flex/dist/index"
     }
 }
