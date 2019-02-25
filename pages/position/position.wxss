@@ -26,3 +26,6 @@
   height: 50rpx;
   margin-right: 50rpx;
 }
+.half{
+  width: 50%
+}

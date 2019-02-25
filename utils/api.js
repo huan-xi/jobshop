@@ -23,6 +23,9 @@ module.exports={
   getJob: function (id) {
     return config.getDomain + `/shop/job/${id}`
   },
+  republic:function(id){
+    return config.getDomain + `/shop/job/republic/${id}`
+  },
   //获取客服信息
   getPhone: config.getDomain + "/value/KF_PHONE",
   //删除职位图片
@@ -34,6 +37,10 @@ module.exports={
   //删除职位信息
   deletePosition:function(id){
     return url +`/shop/job/delete/${id}`
+  },
+  //永久删除
+  destroyJob:function(id){
+    return url + `/shop/job/destroy/${id}`
   },
   //提交反馈信息
   feedback: config.getDomain +"/public/feedback",

@@ -10,7 +10,7 @@ Page({
     notice: '',
     loop: false,
     images: [],
-    checked:false,
+    checked:true,
   },
 
   onPullDownRefresh: function() {

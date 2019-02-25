@@ -15,11 +15,22 @@
             <text class='desc'>发布时间</text>
             <text class='desc'>{{item.create_time}}</text>
           </view>
+          <wxc-flex>
+            <wxc-cc>
+              <icon size='18' color='#9ea7b4' type='browse'></icon>
+              <text class='desc'>阅读量：{{item.pv}}</text>
+            </wxc-cc>
+            <wxc-cc>
+              <icon size='18' color='#9ea7b4' type='praise'></icon>
+              <text class='desc'>点赞次数：{{item.good}}</text>
+            </wxc-cc>
+          </wxc-flex>
         </view>
       </view>
       <view>
-        <image class='editImage' id='{{item.job_id}}' bindtap='deleteTap' src='/images/delete.png'></image>
-        <image class='editImage' id='{{item.job_id}}' bindtap='editTap' src='/images/edite.png'></image>
+        <image class='editImage' data-index='{{index}}' id='{{item.job_id}}' bindtap='deleteTap' src='/images/delete.png'></image>
+        <image wx:if="{{item.status==1}}" class='editImage' data-index='{{index}}' id='{{item.job_id}}' bindtap='editTap' src='/images/edite.png'></image>
+        <image wx:if="{{item.status==2}}" data-index='{{index}}' class='editImage' id='{{item.job_id}}' bindtap='editTap' src='/images/republic.png' ></image>
       </view>
     </wxc-flex>
   </view>

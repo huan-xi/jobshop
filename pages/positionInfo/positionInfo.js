@@ -104,6 +104,8 @@ Page({
                 url: '/pages/position/position',
               })
             }
+            //写有修改
+            wx.setStorageSync("jobChange", true)
           }
         })
       } else {

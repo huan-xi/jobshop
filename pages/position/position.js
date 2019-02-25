@@ -27,12 +27,37 @@ Page({
     this.data.positions = []
     this.refresh()
   },
-  editTap: function (e) {
-    wx.navigateTo({
-      url: `/pages/positionInfo/positionInfo?id=${e.target.id}`,
-    })
+  onLoad: function() {
+    page = 1
+    this.data.positions = []
+    this.refresh()
   },
-  refresh: function (hidden) {
+  editTap: function(e) {
+    let id = e.target.id
+    let index = e.currentTarget.dataset.index
+    let that = this
+    if (this.data.positions[index].status == 1) {
+      wx.navigateTo({
+        url: `/pages/positionInfo/positionInfo?id=${id}`,
+      })
+    } else {
+      wx.showModal({
+        title: '提示',
+        content: '确定重新发布吗，重新发布后会再次被展示',
+        confirmText: '重新发布',
+        success: function(e) {
+          if (e.confirm) {
+            wxRequest.get(api.republic(id), function(e) {
+              if (e.status == 1) {
+                that.onLoad()
+              }
+            });
+          }
+        }
+      })
+    }
+  },
+  refresh: function(hidden) {
     if (!hidden)
       wx.showLoading({
         title: '正在加载数据',
@@ -59,49 +84,87 @@ Page({
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
-    page = 1
-    this.data.positions = []
-    this.refresh();
-  },
-  deleteTap: function (e) {
-    var that = this
-    var id = e.currentTarget.id
-    //删除
-    wx.showModal({
-      title: '提示',
-      content: '删除职位信息后将不再展示，确定删除吗？',
-      confirmText: '删除',
-      success: e => {
-        if (e.confirm) {
-          wx.showLoading({
-            title: '正在删除',
-          })
-          //开始删除
-          wxRequest.get(api.deletePosition(id), e => {
-            wx.hideLoading()
-            if (e.status == 1) {
-              wx.showToast({
-                title: '删除成功',
-              })
-              page = 1
-              that.data.positions = []
-              that.refresh()
-            } else
-              wx.showModal({
-                title: '提示',
-                content: e.msg,
-              })
-
-          })
+  onShow: function() {
+    let that=this
+    wx.getStorage({
+      key: 'jobChange',
+      success: function(res) {
+        console.log(res)
+        if (res.errMsg =="getStorage:ok"&&res.data){
+          that.onLoad()
+          wx.setStorageSync('jobChange', false)
         }
-      }
+      },
     })
+  },
+  deleteTap: function(e) {
+    let id = e.target.id
+    let index = e.currentTarget.dataset.index
+    let that = this
+    if (this.data.positions[index].status == 1) {
+      wx.showModal({
+        title: '提示',
+        content: '删除职位信息后将不再展示，确定删除吗？',
+        confirmText: '删除',
+        success: e => {
+          if (e.confirm) {
+            wx.showLoading({
+              title: '正在删除',
+            })
+            //开始删除
+            wxRequest.get(api.deletePosition(id), e => {
+              wx.hideLoading()
+              if (e.status == 1) {
+                wx.showToast({
+                  title: '删除成功',
+                })
+                that.onLoad()
+              } else
+                wx.showModal({
+                  title: '提示',
+                  content: e.msg,
+                })
+
+            })
+          }
+        }
+      })
+    } else {
+      wx.showModal({
+        title: '提示',
+        content: '确定永久删除该工作信息吗？',
+        confirmText: '删除',
+        success: e => {
+          if (e.confirm) {
+            wx.showLoading({
+              title: '正在删除',
+            })
+            //开始删除
+            wxRequest.get(api.destroyJob(id), e => {
+              wx.hideLoading()
+              if (e.status == 1) {
+                wx.showToast({
+                  title: '删除成功',
+                })
+                page = 1
+                that.data.positions = []
+                that.refresh()
+              } else
+                wx.showModal({
+                  title: '提示',
+                  content: e.msg,
+                })
+
+            })
+          }
+        }
+      })
+    }
   },
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
+  onPullDownRefresh: function() {
     page = 1
     this.data.positions = []
     this.refresh(true)
@@ -110,7 +173,7 @@ Page({
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
+  onReachBottom: function() {
     var that = this
     this.setData({
       tip: '正在加载',
